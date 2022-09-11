@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    /* Language and Environment */
+    "target": "ESNext",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+    "jsx": "preserve",                                   /* Specify what JSX code is generated. */
+
+    /* Modules */
+    "module": "ESNext",                                  /* Specify what module code is generated. */
+    "moduleResolution": "NodeNext",                      /* Specify how TypeScript looks up a file from a given module specifier. */
+    "resolveJsonModule": true,                           /* Enable importing .json files. */
+
+    /* Emit */
+    "declaration": true,                                 /* Generate .d.ts files from TypeScript and JavaScript files in your project. */
+    "newLine": "lf",                                     /* Set the newline character for emitting files. */
+
+    /* Interop Constraints */
+    "isolatedModules": true,                             /* Ensure that each file can be safely transpiled without relying on other imports. */
+
+    /* Type Checking */
+    "strict": true,                                      /* Enable all strict type-checking options. */
+
+    /* Completeness */
+    "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
+  }
+}
