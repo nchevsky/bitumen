@@ -21,6 +21,7 @@ $ npm install bitumen
 
 - `collections`
 - `configuration`
+- `mixins`
 - `types`
 
 For example, to implement the `SortedSet` class from the `collections` entry point:

@@ -1,6 +1,6 @@
 {
   "name": "bitumen",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "A collection of utility classes, types, and opinionated configurations for Babel, ESLint, rollup.js, and TypeScript.",
   "author": "Nick Chevsky",
   "license": "BSD-2-Clause",
@@ -13,6 +13,7 @@
     "./configuration/babel": "./dist/configuration/babel.config.cjs",
     "./configuration/eslint": "./dist/configuration/eslintrc.cjs",
     "./configuration/rollup": "./dist/configuration/rollup.config.cjs",
+    "./mixins": "./dist/mixins/index.js",
     "./types": "./dist/types/index.js"
   },
   "files": [
@@ -25,7 +26,7 @@
     "clean": "concurrently --group --prefix-colors blue,cyan npm:clean:*",
     "clean:build": "env-cmd cross-env-shell del-cli \\$BUILD_PATH/*",
     "clean:dist": "env-cmd cross-env-shell del-cli \\$DIST_PATH/*",
-    "lint": "eslint --ext .cjs,.js,.ts,.tsx .",
+    "lint": "eslint --ext .cjs,.js,.ts,.tsx . && tsc --noEmit",
     "make": "concurrently --group --prefix-colors blue,cyan npm:make:*",
     "make:babel": "env-cmd cross-env-shell babel \\$SRC_PATH/ --extensions .cjs,.js,.ts,.tsx --out-dir \\$BUILD_PATH/",
     "make:tsc": "env-cmd cross-env-shell tsc --emitDeclarationOnly --outDir \\$BUILD_PATH/ --rootDir \\$SRC_PATH/",

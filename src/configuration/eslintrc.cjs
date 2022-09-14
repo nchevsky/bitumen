@@ -50,8 +50,8 @@ module.exports = {
         ...overrideESLintRule('no-loss-of-precision', 'error'),
         ...overrideESLintRule('no-redeclare', 'error'),
         ...overrideESLintRule('no-unused-expressions', 'error'),
-        ...overrideESLintRule('no-unused-vars', ['error', {args: 'none'}]),
-        ...overrideESLintRule('no-use-before-define', 'error'),
+        ...overrideESLintRule('no-unused-vars', ['warn', {args: 'none'}]),
+        ...overrideESLintRule('no-use-before-define', ['error', {functions: false}]),
         ...overrideESLintRule('object-curly-spacing', ['error', 'never']),
         ...overrideESLintRule('quotes', ['error', 'single', {avoidEscape: true}]),
         ...overrideESLintRule('semi', 'error'),
@@ -80,8 +80,8 @@ module.exports = {
     'no-template-curly-in-string': 'error',
     'no-unreachable-loop': 'error',
     'no-unused-private-class-members': 'error',
-    'no-unused-vars': ['error', {args: 'none'}],
-    'no-use-before-define': 'error',
+    'no-unused-vars': ['warn', {args: 'none'}],
+    'no-use-before-define': ['error', {functions: false}],
 
     // suggestions
     'arrow-body-style': 'error',

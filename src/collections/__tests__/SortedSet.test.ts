@@ -11,7 +11,7 @@ class Value implements Comparable {
   equals(another: this): boolean { return this.value == another.value; }
 }
 
-describe('utils/SortedSet', () => {
+describe('collections/SortedSet', () => {
   const makeSet = (values?: Iterable<Value>) => new class extends SortedSet<Value> {
     getValues() { return this.elements.map((element) => element.value); }
   }(values);

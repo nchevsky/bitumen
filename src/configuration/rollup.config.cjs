@@ -6,6 +6,14 @@ const passthroughFiles = [];
 
 export default (packageJson) => ({
   input: Object.values(packageJson.exports).reduce((entryPoints, entryPoint) => {
+    // if this is a conditional export, use its `import` field as the entry point
+    if (typeof entryPoint == 'object') {
+      if (typeof entryPoint.import == 'string') {
+        entryPoint = entryPoint.import;
+      } else {
+        return entryPoints;
+      }
+    }
     // if the entry point is a code file, add it as an input to be processed
     if (entryPoint.match(CODE_FILE_EXTENSION)) {
       entryPoints.push(
@@ -13,8 +21,8 @@ export default (packageJson) => ({
           .replace(`/${process.env.DIST_PATH}/`, `/${process.env.BUILD_PATH}/`)
           .replace(CODE_FILE_EXTENSION, '.js') // .cjs → .js
       );
-    // otherwise, queue it to be copied as-is from the source directory
-    } else {
+    // otherwise, as long as it is not a directory, queue it to be copied as-is from the source directory
+    } else if (!entryPoint.endsWith('/')) {
       passthroughFiles.push(entryPoint.replace(`./${process.env.DIST_PATH}/`, `${process.env.SRC_PATH}/`));
     }
     return entryPoints;
