@@ -1,6 +1,6 @@
 {
   "name": "bitumen",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A collection of utility classes, types, and opinionated configurations for Babel, ESLint, rollup.js, and TypeScript.",
   "author": "Nick Chevsky",
   "license": "BSD-2-Clause",
@@ -9,12 +9,21 @@
     "url": "https://github.com/nchevsky/bitumen"
   },
   "exports": {
-    "./collections": "./dist/collections/index.js",
+    "./collections": {
+      "import": "./dist/collections/index.js",
+      "require": "./dist/collections/index.cjs"
+    },
     "./configuration/babel": "./dist/configuration/babel.config.cjs",
     "./configuration/eslint": "./dist/configuration/eslintrc.cjs",
     "./configuration/rollup": "./dist/configuration/rollup.config.cjs",
-    "./mixins": "./dist/mixins/index.js",
-    "./types": "./dist/types/index.js"
+    "./mixins": {
+      "import": "./dist/mixins/index.js",
+      "require": "./dist/mixins/index.cjs"
+    },
+    "./types": {
+      "import": "./dist/types/index.js",
+      "require": "./dist/types/index.cjs"
+    }
   },
   "files": [
     "dist/",
