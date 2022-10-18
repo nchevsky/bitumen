@@ -1,5 +1,3 @@
-import '@jest/globals';
-
 import {Constructor} from '../../types/index.js';
 import {named} from '../index.js';
 

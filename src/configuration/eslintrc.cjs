@@ -1,78 +1,117 @@
 /**
- * Overrides an ESLint rule with its \@typescript-eslint equivalent.
+ * Generates `@typescript-eslint` overrides for a given set of ESLint core rules.
  * 
- * @param {string} name - Name of the base ESLint rule to be overridden.
- * @param {Array | string} options - Options to set on the overriding \@typescript-eslint rule.
- * @returns {Record<string, Array | string>} Object with two rules:
- *                                           - the overridden ESLint rule set to _'off'_, and
- *                                           - the overriding \@typescript-eslint rule with the given `options`.
+ * @param {Record<string, Array | string>} rules - Object whose keys are the names of core rules to override, and
+ *                                                 each value either a severity level or a severity + options array.
+ * @returns {Record<string, Array | string>} Object with two rules for each rule given in `rules`:
+ *                                           1. the overridden ESLint core rule set to _'off'_, and
+ *                                           2. the overriding `@typescript-eslint` rule with the given severity
+ *                                             level and any options.
  */
-function overrideESLintRule(name, options) {
-  return {[name]: 'off', [`@typescript-eslint/${name}`]: options};
+function overrideForTypeScript(rules) {
+  return Object.fromEntries(Object.entries(rules).reduce((overrides, [name, options]) => {
+    overrides.push([name, 'off'], [`@typescript-eslint/${name}`, options]);
+    return overrides;
+  }, []));
 }
 
 module.exports = {
-  env: {node: true},
-  extends: 'eslint:recommended',
+  env: {es6: true, node: true},
+  extends: [
+    'eslint:recommended', // https://github.com/eslint/eslint/blob/main/conf/eslint-recommended.js
+    'plugin:import/recommended' // https://github.com/import-js/eslint-plugin-import/blob/main/config/recommended.js
+  ],
   ignorePatterns: ['**/build', '**/dist'],
   overrides: [
-    // common
+    // ESM
     {
-      env: {'shared-node-browser': true},
-      files: ['./*']
+      files: ['*.@(j|t)s?(x)'], // *.js, *.jsx, *.ts, *.tsx
+      rules: {'import/no-commonjs': 'error'}
+    },
+    // indices
+    {
+      files: ['index.*'],
+      rules: {
+        'import/prefer-default-export': 'off' // `export {default as foo} from 'foo';`
+      }
     },
     // Jest
     {
       env: {jest: true},
       files: ['**/__mocks__/*', '**/__tests__/*'],
-      rules: {'class-methods-use-this': 'off', 'no-new': 'off'}
+      rules: {
+        'class-methods-use-this': 'off',
+        'max-statements-per-line': ['error', {max: 2}], // `act(() => { doSomething(); });`
+        'no-new': 'off'
+      }
     },
     // TypeScript
     {
+      // https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/src/configs/strict.ts
       extends: 'plugin:@typescript-eslint/strict',
-      files: ['*.ts', '*.tsx'],
-      parserOptions: {project: ['./tsconfig.json']},
+      files: ['*?(.d).?(c)ts?(x)'],
+      parserOptions: { // https://github.com/typescript-eslint/typescript-eslint/tree/main/packages/parser#configuration
+        ecmaVersion: 'latest',
+        project: ['./tsconfig.json']
+      },
       rules: {
-        // ESLint rules with @typescript-eslint overrides
-        ...overrideESLintRule('brace-style', ['error', '1tbs', {allowSingleLine: true}]),
-        ...overrideESLintRule('comma-dangle', 'error'),
-        ...overrideESLintRule('comma-spacing', 'error'),
-        ...overrideESLintRule('func-call-spacing', 'error'),
-        ...overrideESLintRule('indent', ['error', 2, {
-          SwitchCase: 1, ignoredNodes: ['ClassDeclaration', 'TSUnionType'], offsetTernaryExpressions: true
-        }]),
-        ...overrideESLintRule('keyword-spacing', 'error'),
-        ...overrideESLintRule('lines-between-class-members', ['error', 'always', {exceptAfterSingleLine: true}]),
-        ...overrideESLintRule('no-duplicate-imports', 'error'),
-        ...overrideESLintRule('no-extra-semi', 'error'),
-        ...overrideESLintRule('no-invalid-this', 'error'),
-        ...overrideESLintRule('no-loop-func', 'error'),
-        ...overrideESLintRule('no-loss-of-precision', 'error'),
-        ...overrideESLintRule('no-redeclare', 'error'),
-        ...overrideESLintRule('no-unused-expressions', 'error'),
-        ...overrideESLintRule('no-unused-vars', ['warn', {args: 'none'}]),
-        ...overrideESLintRule('no-use-before-define', ['error', {functions: false}]),
-        ...overrideESLintRule('object-curly-spacing', ['error', 'never']),
-        ...overrideESLintRule('quotes', ['error', 'single', {avoidEscape: true}]),
-        ...overrideESLintRule('semi', 'error'),
-        ...overrideESLintRule('space-before-blocks', 'error'),
-        ...overrideESLintRule('space-before-function-paren', ['error', {
-          anonymous: 'always', asyncArrow: 'always', named: 'never'
-        }]),
-        ...overrideESLintRule('space-infix-ops', ['error', {int32Hint: true}]),
+        //==============================================================================================================
+        // @typescript-eslint/eslint-plugin <https://typescript-eslint.io/rules/>
+        //==============================================================================================================
 
-        // rules native to @typescript-eslint
+        // extended ESLint core rules
+        ...overrideForTypeScript({
+          'brace-style': ['error', '1tbs', {allowSingleLine: true}],
+          'comma-dangle': 'error',
+          'comma-spacing': 'error',
+          'func-call-spacing': 'error',
+          indent: ['error', 2, {
+            SwitchCase: 1, ignoredNodes: ['ClassDeclaration', 'TSUnionType'], offsetTernaryExpressions: true
+          }],
+          'keyword-spacing': 'error',
+          'lines-between-class-members': ['error', 'always', {exceptAfterSingleLine: true}],
+          'no-duplicate-imports': 'error',
+          'no-extra-semi': 'error',
+          'no-invalid-this': 'error',
+          'no-loop-func': 'error',
+          'no-loss-of-precision': 'error',
+          'no-redeclare': 'error',
+          'no-unused-expressions': 'error',
+          'no-unused-vars': ['warn', {args: 'none'}],
+          'no-use-before-define': ['error', {functions: false}],
+          'object-curly-spacing': ['error', 'never'],
+          quotes: ['error', 'single', {avoidEscape: true}],
+          semi: 'error',
+          'space-before-blocks': 'error',
+          'space-before-function-paren': ['error', {
+            anonymous: 'always', asyncArrow: 'always', named: 'never'
+          }],
+          'space-infix-ops': ['error', {int32Hint: true}]
+        }),
+
+        // native rules
         '@typescript-eslint/array-type': ['error', {default: 'generic'}],
         '@typescript-eslint/no-extraneous-class': 'off',
-        '@typescript-eslint/unified-signatures': ['error', {ignoreDifferentlyNamedParameters: true}]
+        '@typescript-eslint/unified-signatures': ['error', {ignoreDifferentlyNamedParameters: true}],
+
+        //==============================================================================================================
+        // eslint-plugin-import <https://github.com/import-js/eslint-plugin-import#rules>
+        //==============================================================================================================
+
+        'import/named': 'off' // redundant for TypeScript
       }
     }
   ],
-  parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint'],
+  parserOptions: { // https://eslint.org/docs/latest/user-guide/configuring/language-options#specifying-parser-options
+    ecmaVersion: 'latest'
+  },
   reportUnusedDisableDirectives: true,
   root: true,
   rules: {
+    //==================================================================================================================
+    // eslint <https://eslint.org/docs/latest/rules>
+    //==================================================================================================================
+
     // possible problems
     'no-constant-binary-expression': 'error',
     'no-duplicate-imports': 'error',
@@ -86,12 +125,13 @@ module.exports = {
     // suggestions
     'arrow-body-style': 'error',
     'block-scoped-var': 'error',
-    camelcase: ['error', {allow: ['^SoftLayer_']}],
+    camelcase: 'error',
     'class-methods-use-this': 'error',
     curly: ['error', 'multi-line'],
     'default-case-last': 'error',
     'grouped-accessor-pairs': 'error',
     'guard-for-in': 'error',
+    'logical-assignment-operators': ['error', 'always', {enforceForIfStatements: true}],
     'new-cap': ['error', {capIsNewExceptionPattern: 'able$'}],
     'no-alert': 'error',
     'no-else-return': 'error',
@@ -114,7 +154,7 @@ module.exports = {
     'no-return-assign': 'error',
     'no-script-url': 'error',
     'no-undef-init': 'error',
-    'no-underscore-dangle': 'error',
+    'no-underscore-dangle': ['error', {allow: ['__typename']}],
     'no-unneeded-ternary': 'error',
     'no-unused-expressions': 'error',
     'no-useless-call': 'error',
@@ -196,6 +236,49 @@ module.exports = {
     'template-tag-spacing': 'error',
     'unicode-bom': 'error',
     'wrap-iife': ['error', 'inside'],
-    'yield-star-spacing': ['error', 'before']
+    'yield-star-spacing': ['error', 'before'],
+
+    //==================================================================================================================
+    // eslint-plugin-import <https://github.com/import-js/eslint-plugin-import#rules>
+    //==================================================================================================================
+
+    'import/exports-last': 'error',
+    'import/extensions': ['error', 'ignorePackages', {ts: 'ignore', tsx: 'ignore'}],
+    'import/first': 'error',
+    'import/newline-after-import': 'error',
+    'import/no-absolute-path': 'error',
+    'import/no-amd': 'error',
+    'import/no-cycle': 'error',
+    'import/no-deprecated': 'error',
+    'import/no-dynamic-require': 'error',
+    'import/no-extraneous-dependencies': 'error',
+    'import/no-import-module-exports': 'error',
+    'import/no-mutable-exports': 'error',
+    'import/no-named-default': 'error',
+    'import/no-namespace': 'error',
+    'import/no-relative-packages': 'error',
+    'import/no-self-import': 'error',
+    'import/no-unassigned-import': 'error',
+    'import/no-unresolved': ['error', {commonjs: true}],
+    'import/no-useless-path-segments': ['error', {commonjs: true}],
+    'import/no-webpack-loader-syntax': 'error',
+    'import/order': ['error', {
+      alphabetize: {order: 'asc'},
+      groups: ['builtin', 'external', 'internal'],
+      'newlines-between': 'always',
+      warnOnUnassignedImports: true
+    }],
+    'import/prefer-default-export': 'error'
+  },
+  settings: {
+    //==================================================================================================================
+    // eslint-plugin-import <https://github.com/import-js/eslint-plugin-import#settings>
+    //==================================================================================================================
+    'import/extensions': ['.cjs', '.cts', '.d.cts', '.d.ts', '.d.tsx', '.js', '.json', '.jsx', '.ts', '.tsx'],
+    'import/external-module-folders': ['node_modules', 'node_modules/@types'],
+    'import/resolver': {
+      'babel-module': {}, // https://github.com/tleunen/eslint-import-resolver-babel-module
+      typescript: {} // https://github.com/import-js/eslint-import-resolver-typescript
+    }
   }
 };

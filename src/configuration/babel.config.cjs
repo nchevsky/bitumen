@@ -4,7 +4,6 @@
 //======================================================================================================================
 
 module.exports = {
-  ignore: process.env.ENV == 'jest' ? [] : ['**/__mocks__/', '**/__tests__/'],
   plugins: [
     '@babel/plugin-syntax-import-assertions'
   ].concat(

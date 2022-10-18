@@ -1,4 +1,4 @@
-import {Comparable} from './index.js';
+import type Comparable from './Comparable.js';
 
 export function isComparable(value: unknown): value is Comparable {
   return isObject(value) && ('compareTo' in value || 'equals' in value);
