@@ -1,6 +1,6 @@
 {
   "name": "bitumen",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A collection of utility classes, types, and opinionated configurations for Babel, ESLint, rollup.js, and TypeScript.",
   "author": "Nick Chevsky",
   "license": "BSD-2-Clause",
@@ -27,6 +27,7 @@
     }
   },
   "files": [
+    "babel.config.cjs",
     "dist/",
     "tsconfig.json"
   ],
@@ -78,9 +79,6 @@
     "eslint-import-resolver-babel-module": "^5.3.1",
     "eslint-import-resolver-typescript": "^3.5.1",
     "eslint-plugin-import": "npm:eslint-plugin-i@^2.26.0-2"
-  },
-  "babel": {
-    "extends": "./src/configuration/babel.config.cjs"
   },
   "eslintConfig": {
     "extends": "./src/configuration/eslintrc.cjs"
