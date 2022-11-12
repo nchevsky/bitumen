@@ -66,7 +66,15 @@ module.exports = {
           'comma-spacing': 'error',
           'func-call-spacing': 'error',
           indent: ['error', 2, {
-            SwitchCase: 1, ignoredNodes: ['ClassDeclaration', 'TSUnionType'], offsetTernaryExpressions: true
+            SwitchCase: 1,
+            ignoredNodes: [
+              'ClassDeclaration',
+              'TSIntersectionType',
+              'TSTypeAnnotation',
+              'TSTypeParameterInstantiation',
+              'TSUnionType'
+            ],
+            offsetTernaryExpressions: true
           }],
           'keyword-spacing': 'error',
           'lines-between-class-members': ['error', 'always', {exceptAfterSingleLine: true}],
@@ -115,6 +123,7 @@ module.exports = {
     // possible problems
     'no-constant-binary-expression': 'error',
     'no-duplicate-imports': 'error',
+    'no-new-native-nonconstructor': 'error',
     'no-self-compare': 'error',
     'no-template-curly-in-string': 'error',
     'no-unreachable-loop': 'error',
@@ -135,6 +144,7 @@ module.exports = {
     'new-cap': ['error', {capIsNewExceptionPattern: 'able$'}],
     'no-alert': 'error',
     'no-else-return': 'error',
+    'no-empty-static-block': 'error',
     'no-eq-null': 'error',
     'no-eval': 'error',
     'no-extra-label': 'error',
