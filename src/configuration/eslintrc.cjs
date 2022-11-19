@@ -99,6 +99,7 @@ module.exports = {
 
         // native rules
         '@typescript-eslint/array-type': ['error', {default: 'generic'}],
+        '@typescript-eslint/naming-convention': 'off', // TODO
         '@typescript-eslint/no-extraneous-class': 'off',
         '@typescript-eslint/unified-signatures': ['error', {ignoreDifferentlyNamedParameters: true}],
 

@@ -34,7 +34,7 @@ module.exports = {
     'react/jsx-no-leaked-render': 'off', // not type-aware and fails with boolean state variables
     'react/jsx-no-literals': ['error', {ignoreProps: true, noStrings: true}],
     'react/jsx-no-target-blank': ['error', {allowReferrer: true, warnOnSpreadAttributes: true}],
-    'react/jsx-no-useless-fragment': ['error', {allowExpressions: true}],
+    'react/jsx-no-useless-fragment': 'off',
     'react/jsx-one-expression-per-line': 'off',
     'react/jsx-tag-spacing': ['error', {beforeClosing: 'never', beforeSelfClosing: 'never'}],
     'react/jsx-wrap-multilines': 'off' // unconditionally enforces parentheses even when redundant
