@@ -15,7 +15,7 @@ module.exports = {
     'react/no-adjacent-inline-elements': 'off',
     'react/no-multi-comp': ['error', {ignoreStateless: true}],
     'react/no-set-state': 'off', // does not apply to function components
-    'react/require-default-props': ['error', {forbidDefaultForRequired: true}],
+    'react/require-default-props': 'off', // too problematic for function, object prop types
     'react/sort-comp': 'off', // does not apply to function components
 
     // https://github.com/jsx-eslint/eslint-plugin-react#jsx-specific-rules

@@ -269,7 +269,7 @@ module.exports = {
     'import/no-namespace': 'error',
     'import/no-relative-packages': 'error',
     'import/no-self-import': 'error',
-    'import/no-unassigned-import': 'error',
+    'import/no-unassigned-import': ['error', {allow: ['**/*.?(s)css']}],
     'import/no-unresolved': ['error', {commonjs: true}],
     'import/no-useless-path-segments': ['error', {commonjs: true}],
     'import/no-webpack-loader-syntax': 'error',
