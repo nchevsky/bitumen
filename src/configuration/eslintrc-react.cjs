@@ -5,6 +5,17 @@ module.exports = {
     // https://github.com/jsx-eslint/eslint-plugin-react/blob/master/configs/all.js
     'plugin:react/all'
   ],
+  overrides: [
+    // Jest
+    {
+      env: {jest: true},
+      files: ['**/__mocks__/*', '**/__tests__/*'],
+      rules: {
+        // https://github.com/jsx-eslint/eslint-plugin-react#jsx-specific-rules
+        'react/jsx-no-literals': 'off'
+      }
+    }
+  ],
   rules: {
     // https://github.com/jsx-eslint/eslint-plugin-react#list-of-supported-rules
     'react/boolean-prop-naming': 'off',

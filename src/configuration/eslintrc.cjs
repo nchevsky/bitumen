@@ -165,7 +165,9 @@ module.exports = {
     'no-return-assign': 'error',
     'no-script-url': 'error',
     'no-undef-init': 'error',
-    'no-underscore-dangle': ['error', {allow: ['__typename']}],
+    'no-underscore-dangle': ['error', {
+      allow: ['__typename'], allowInArrayDestructuring: false, allowInObjectDestructuring: false
+    }],
     'no-unneeded-ternary': 'error',
     'no-unused-expressions': 'error',
     'no-useless-call': 'error',
