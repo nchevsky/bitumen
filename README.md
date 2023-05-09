@@ -23,6 +23,7 @@ $ npm install bitumen
 - `configuration`
 - `mixins`
 - `types`
+- `utils`
 
 For example, to implement the `SortedSet` class from the `collections` entry point:
 ```js
@@ -42,8 +43,9 @@ TypeScript type declarations are included to aid in writing type-safe code—eve
 ```jsonc
 {
   "compilerOptions": {
-    "checkJs": true, // optional but recommended
-    "moduleResolution": "NodeNext"
+    "checkJs": true,
+    "moduleResolution": "NodeNext",
+    "strictNullChecks": true // optional but recommended
   }
 }
 ```

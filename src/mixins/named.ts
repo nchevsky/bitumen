@@ -1,5 +1,5 @@
 import type Comparable from '../types/Comparable.js';
-import {Constructor, isComparable} from '../types/index.js';
+import {type Constructor, isComparable} from '../types/index.js';
 
 /**
  * Augments an entity with a `name` property and name-based implementations of `Comparable`'s `compareTo()` and

@@ -18,7 +18,7 @@ function overrideForTypeScript(rules) {
 module.exports = {
   env: {es6: true, node: true},
   extends: [
-    'eslint:recommended', // https://github.com/eslint/eslint/blob/main/conf/eslint-recommended.js
+    'eslint:recommended', // https://github.com/eslint/eslint/blob/main/packages/js/src/configs/eslint-recommended.js
     'plugin:import/recommended' // https://github.com/import-js/eslint-plugin-import/blob/main/config/recommended.js
   ],
   ignorePatterns: ['**/build', '**/dist'],
@@ -35,14 +35,29 @@ module.exports = {
         'import/prefer-default-export': 'off' // `export {default as foo} from 'foo';`
       }
     },
-    // Jest
+    // Jest mocks
     {
       env: {jest: true},
-      files: ['**/__mocks__/*', '**/__tests__/*'],
+      files: ['**/__mocks__/*'],
+      rules: {
+        'import/no-unused-modules': ['error', {missingExports: true}]
+      }
+    },
+    // Jest tests
+    {
+      env: {jest: true},
+      files: ['**/__tests__/*'],
       rules: {
         'class-methods-use-this': 'off',
-        'max-statements-per-line': ['error', {max: 2}], // `act(() => { doSomething(); });`
         'no-new': 'off'
+      }
+    },
+    // JSX
+    {
+      files: ['*.@(j|t)sx'], // .jsx, .tsx
+      rules: {
+        // https://eslint.org/docs/latest/rules/multiline-ternary
+        'multiline-ternary': 'off' // clashes with `react/jsx-indent` which in turn clashes with `indent`
       }
     },
     // TypeScript
@@ -76,6 +91,7 @@ module.exports = {
             ],
             offsetTernaryExpressions: true
           }],
+          'key-spacing': 'error',
           'keyword-spacing': 'error',
           'lines-between-class-members': ['error', 'always', {exceptAfterSingleLine: true}],
           'no-duplicate-imports': 'error',
@@ -99,8 +115,15 @@ module.exports = {
 
         // native rules
         '@typescript-eslint/array-type': ['error', {default: 'generic'}],
+        '@typescript-eslint/consistent-type-exports': ['error', {fixMixedExportsWithInlineTypeSpecifier: true}],
+        '@typescript-eslint/consistent-type-imports': ['error', {
+          disallowTypeAnnotations: false, fixStyle: 'inline-type-imports'
+        }],
         '@typescript-eslint/naming-convention': 'off', // TODO
+        '@typescript-eslint/no-duplicate-type-constituents': 'error',
         '@typescript-eslint/no-extraneous-class': 'off',
+        '@typescript-eslint/no-import-type-side-effects': 'error',
+        '@typescript-eslint/promise-function-async': 'error',
         '@typescript-eslint/unified-signatures': ['error', {ignoreDifferentlyNamedParameters: true}],
 
         //==============================================================================================================
@@ -220,7 +243,7 @@ module.exports = {
     'linebreak-style': 'error',
     'lines-between-class-members': ['error', 'always', {exceptAfterSingleLine: true}],
     'max-len': ['error', {code: 120}],
-    'max-statements-per-line': 'error',
+    'max-statements-per-line': ['error', {max: 2}],
     'multiline-ternary': ['error', 'always-multiline'],
     'new-parens': 'error',
     'no-multi-spaces': 'error',
@@ -261,7 +284,6 @@ module.exports = {
     'import/newline-after-import': 'error',
     'import/no-absolute-path': 'error',
     'import/no-amd': 'error',
-    'import/no-cycle': 'error',
     'import/no-deprecated': 'error',
     'import/no-dynamic-require': 'error',
     'import/no-extraneous-dependencies': 'error',

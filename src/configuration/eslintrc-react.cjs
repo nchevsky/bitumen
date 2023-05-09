@@ -2,7 +2,7 @@ module.exports = {
   extends: [
     // https://github.com/facebook/react/blob/main/packages/eslint-plugin-react-hooks/src/index.js
     'plugin:react-hooks/recommended',
-    // https://github.com/jsx-eslint/eslint-plugin-react/blob/master/configs/all.js
+    // https://github.com/jsx-eslint/eslint-plugin-react/blob/master/lib/rules/index.js
     'plugin:react/all'
   ],
   overrides: [
@@ -11,8 +11,16 @@ module.exports = {
       env: {jest: true},
       files: ['**/__mocks__/*', '**/__tests__/*'],
       rules: {
-        // https://github.com/jsx-eslint/eslint-plugin-react#jsx-specific-rules
+        // https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/jsx-no-literals.md
         'react/jsx-no-literals': 'off'
+      }
+    },
+    // TypeScript
+    {
+      files: ['*?(.d).?(c)ts?(x)'],
+      rules: {
+        // https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/jsx-props-no-spreading.md
+        'react/jsx-props-no-spreading': 'off' // safe when components are fully typed
       }
     }
   ],
@@ -26,7 +34,8 @@ module.exports = {
     'react/no-adjacent-inline-elements': 'off',
     'react/no-multi-comp': ['error', {ignoreStateless: true}],
     'react/no-set-state': 'off', // does not apply to function components
-    'react/require-default-props': 'off', // too problematic for function, object prop types
+    // too problematic for function, object prop types; prop types being deprecated for function components
+    'react/require-default-props': 'off',
     'react/sort-comp': 'off', // does not apply to function components
 
     // https://github.com/jsx-eslint/eslint-plugin-react#jsx-specific-rules

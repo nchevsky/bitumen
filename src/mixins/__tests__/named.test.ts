@@ -1,4 +1,4 @@
-import {Constructor} from '../../types/index.js';
+import type {Constructor} from '../../types/index.js';
 import {named} from '../index.js';
 
 describe('mixins/named', () => {
