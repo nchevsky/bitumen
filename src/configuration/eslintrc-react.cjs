@@ -12,7 +12,9 @@ module.exports = {
       files: ['**/__mocks__/*', '**/__tests__/*'],
       rules: {
         // https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/jsx-no-literals.md
-        'react/jsx-no-literals': 'off'
+        'react/jsx-no-literals': 'off',
+        // https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/prop-types.md
+        'react/prop-types': 'off'
       }
     },
     // TypeScript

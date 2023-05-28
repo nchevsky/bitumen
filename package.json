@@ -1,6 +1,6 @@
 {
   "name": "bitumen",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "A collection of utility classes, types, and opinionated configurations for Babel, ESLint, rollup.js, and TypeScript.",
   "author": "Nick Chevsky",
   "license": "BSD-2-Clause",
@@ -45,7 +45,7 @@
     "make": "concurrently --group --prefix-colors blue,cyan npm:make:*",
     "make:babel": "env-cmd cross-env-shell babel \\$SRC_PATH/ --extensions \\$EXTENSIONS --ignore '**/*.d.cts' --out-dir \\$BUILD_PATH/",
     "make:tsc": "env-cmd cross-env-shell tsc --emitDeclarationOnly --outDir \\$BUILD_PATH/ --rootDir \\$SRC_PATH/",
-    "package": "concurrently --group --prefix-colors blue,cyan,blue,cyan npm:package:*",
+    "package": "concurrently --group --max-processes=1 --prefix-colors blue,cyan,blue,cyan npm:package:*",
     "package:cjs": "env-cmd cross-env-shell FORMAT=cjs rollup --config",
     "package:es": "env-cmd cross-env-shell FORMAT=es rollup --config",
     "prepare": "husky install",
@@ -73,15 +73,15 @@
     "typescript": "^4.9.5"
   },
   "peerDependencies": {
-    "@babel/core": "^7.21.8",
+    "@babel/core": "^7.22.1",
     "@babel/eslint-parser": "^7.21.8",
     "@babel/plugin-syntax-import-assertions": "^7.20.0",
-    "@babel/preset-env": "^7.21.5",
+    "@babel/preset-env": "^7.22.2",
     "@babel/preset-typescript": "^7.21.5",
-    "@typescript-eslint/eslint-plugin": "^5.59.5",
-    "@typescript-eslint/parser": "^5.59.5",
+    "@typescript-eslint/eslint-plugin": "^5.59.7",
+    "@typescript-eslint/parser": "^5.59.7",
     "babel-plugin-replace-import-extension": "^1.1.3",
-    "eslint": "^8.40.0",
+    "eslint": "^8.41.0",
     "eslint-import-resolver-babel-module": "^5.3.2",
     "eslint-import-resolver-typescript": "^3.5.5",
     "eslint-plugin-import": "npm:eslint-plugin-i@^2.27.5"

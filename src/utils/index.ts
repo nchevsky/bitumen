@@ -1,5 +1,7 @@
 import {isObject} from '../types/guards.js';
 
+export {default as ExternallyControlledPromise} from './ExternallyControlledPromise.js';
+
 /**
  * Determines whether a given value is empty* and, if so, returns a given substitute
  * as a default/fallback value; otherwise, returns the original value if non-empty.

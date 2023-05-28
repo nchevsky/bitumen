@@ -284,7 +284,7 @@ module.exports = {
     'import/newline-after-import': 'error',
     'import/no-absolute-path': 'error',
     'import/no-amd': 'error',
-    'import/no-deprecated': 'error',
+    'import/no-deprecated': 'warn',
     'import/no-dynamic-require': 'error',
     'import/no-extraneous-dependencies': 'error',
     'import/no-import-module-exports': 'error',
