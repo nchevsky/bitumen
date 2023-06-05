@@ -52,7 +52,7 @@ module.exports = {
     'react/jsx-max-depth': ['error', {max: 8}],
     'react/jsx-max-props-per-line': ['error', {when: 'multiline'}],
     'react/jsx-newline': ['error', {prevent: true}],
-    'react/jsx-no-bind': ['error', {allowArrowFunctions: true}],
+    'react/jsx-no-bind': ['error', {allowArrowFunctions: true, allowFunctions: true}],
     'react/jsx-no-leaked-render': 'off', // not type-aware and fails with boolean state variables
     'react/jsx-no-literals': ['error', {ignoreProps: true, noStrings: true}],
     'react/jsx-no-target-blank': ['error', {allowReferrer: true, warnOnSpreadAttributes: true}],
