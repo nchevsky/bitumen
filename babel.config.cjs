@@ -5,10 +5,9 @@
 
 module.exports = {
   plugins: [
-    '@babel/plugin-syntax-import-assertions'
-  ].concat(
-    process.env.ENV == 'jest' ? [['replace-import-extension', {extMapping: {'.js': '', '.jsx': ''}}]] : []
-  ),
+    ['@babel/plugin-syntax-import-attributes', {deprecatedAssertSyntax: true}],
+    process.env.ENV == 'jest' && ['replace-import-extension', {extMapping: {'.js': '', '.jsx': ''}}]
+  ].filter(Boolean),
   presets: [
     ['@babel/preset-env', {
       corejs: 3,
@@ -23,7 +22,7 @@ module.exports = {
       useBuiltIns: 'usage'
     }],
     ['@babel/preset-typescript', {
-      allowDeclareFields: true // will be enabled by default in Babel 8
+      allowDeclareFields: true // TODO: will be enabled by default in Babel 8
     }]
   ]
 };
