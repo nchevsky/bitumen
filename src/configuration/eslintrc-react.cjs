@@ -9,10 +9,14 @@ module.exports = {
     // Jest
     {
       env: {jest: true},
-      files: ['**/__mocks__/*', '**/__tests__/*'],
+      files: ['**/__mocks__/**', '**/__tests__/**'],
       rules: {
+        // https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/forbid-foreign-prop-types.md
+        'react/forbid-foreign-prop-types': 'off',
         // https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/jsx-no-literals.md
         'react/jsx-no-literals': 'off',
+        // https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/jsx-props-no-spreading.md
+        'react/jsx-props-no-spreading': 'off',
         // https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/prop-types.md
         'react/prop-types': 'off'
       }
@@ -36,7 +40,8 @@ module.exports = {
     'react/no-adjacent-inline-elements': 'off',
     'react/no-multi-comp': ['error', {ignoreStateless: true}],
     'react/no-set-state': 'off', // does not apply to function components
-    // too problematic for function, object prop types; prop types being deprecated for function components
+    'react/no-unstable-nested-components': ['error', {allowAsProps: true}],
+    // too problematic for function, object prop types; default props being deprecated for function components
     'react/require-default-props': 'off',
     'react/sort-comp': 'off', // does not apply to function components
 

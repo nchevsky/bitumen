@@ -26,29 +26,39 @@ module.exports = {
     // ESM
     {
       files: ['*.@(j|t)s?(x)'], // *.js, *.jsx, *.ts, *.tsx
+      // https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-commonjs.md
       rules: {'import/no-commonjs': 'error'}
     },
     // indices
     {
       files: ['index.*'],
       rules: {
+        // https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/prefer-default-export.md
         'import/prefer-default-export': 'off' // `export {default as foo} from 'foo';`
       }
     },
-    // Jest mocks
+    // Jest mocks (ESM)
     {
       env: {jest: true},
-      files: ['**/__mocks__/*'],
+      files: ['**/__mocks__/**/*.@(j|t)s?(x)'],
       rules: {
-        'import/no-unused-modules': ['error', {missingExports: true}]
+        // https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/export.md
+        'import/export': 'off',
+        // Jest's dynamic importing of manual mocks precludes static analysis of unused exports
+        // https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-unused-modules.md
+        'import/no-unused-modules': ['error', {missingExports: true, unusedExports: false}],
+        // https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/prefer-default-export.md
+        'import/prefer-default-export': 'off'
       }
     },
     // Jest tests
     {
       env: {jest: true},
-      files: ['**/__tests__/*'],
+      files: ['**/__tests__/**'],
       rules: {
+        // https://eslint.org/docs/latest/rules/class-methods-use-this
         'class-methods-use-this': 'off',
+        // https://eslint.org/docs/latest/rules/no-new
         'no-new': 'off'
       }
     },
