@@ -1,4 +1,4 @@
-import ExternallyControlledPromise from './ExternallyControlledPromise.js';
+import ExternallyControlledPromise from '../ExternallyControlledPromise.js';
 
 describe('utils/ExternallyControlledPromise', () => {
   test('can be settled externally when created without an executor', () => {

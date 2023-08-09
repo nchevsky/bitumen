@@ -20,14 +20,6 @@ module.exports = {
         // https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/prop-types.md
         'react/prop-types': 'off'
       }
-    },
-    // TypeScript
-    {
-      files: ['*?(.d).?(c)ts?(x)'],
-      rules: {
-        // https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/jsx-props-no-spreading.md
-        'react/jsx-props-no-spreading': 'off' // safe when components are fully typed
-      }
     }
   ],
   rules: {
@@ -41,6 +33,7 @@ module.exports = {
     'react/no-multi-comp': ['error', {ignoreStateless: true}],
     'react/no-set-state': 'off', // does not apply to function components
     'react/no-unstable-nested-components': ['error', {allowAsProps: true}],
+    'react/prefer-read-only-props': 'off',
     // too problematic for function, object prop types; default props being deprecated for function components
     'react/require-default-props': 'off',
     'react/sort-comp': 'off', // does not apply to function components

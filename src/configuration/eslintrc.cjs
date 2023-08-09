@@ -40,10 +40,8 @@ module.exports = {
     // Jest mocks (ESM)
     {
       env: {jest: true},
-      files: ['**/__mocks__/**/*.@(j|t)s?(x)'],
+      files: ['**/__mocks__/**'],
       rules: {
-        // https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/export.md
-        'import/export': 'off',
         // Jest's dynamic importing of manual mocks precludes static analysis of unused exports
         // https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-unused-modules.md
         'import/no-unused-modules': ['error', {missingExports: true, unusedExports: false}],
@@ -74,7 +72,7 @@ module.exports = {
     {
       // https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/src/configs/strict.ts
       extends: 'plugin:@typescript-eslint/strict',
-      files: ['*?(.d).?(c)ts?(x)'],
+      files: ['*.?(c)ts?(x)'],
       parserOptions: { // https://github.com/typescript-eslint/typescript-eslint/tree/main/packages/parser#configuration
         ecmaVersion: 'latest',
         project: ['./tsconfig.json']
@@ -319,7 +317,7 @@ module.exports = {
     //==================================================================================================================
     // eslint-plugin-import <https://github.com/import-js/eslint-plugin-import#settings>
     //==================================================================================================================
-    'import/extensions': ['.cjs', '.cts', '.d.cts', '.d.ts', '.d.tsx', '.js', '.json', '.jsx', '.ts', '.tsx'],
+    'import/extensions': ['.cjs', '.cts', '.js', '.json', '.jsx', '.ts', '.tsx'],
     'import/external-module-folders': ['node_modules', 'node_modules/@types'],
     'import/resolver': {
       'babel-module': {}, // https://github.com/tleunen/eslint-import-resolver-babel-module
