@@ -6,24 +6,28 @@ const passthroughFiles = [];
 
 export default (packageJson) => ({
   input: Object.values(packageJson.exports).reduce((entryPoints, entryPoint) => {
-    // if this is a conditional export, use its `import` field as the entry point
-    if (typeof entryPoint == 'object') {
-      if (typeof entryPoint.import == 'string') {
-        entryPoint = entryPoint.import;
-      } else {
-        return entryPoints;
+    function processPath(/** @type {string} */ path) {
+      // if this is a code file, add it as an input to be processed
+      if (path.match(CODE_FILE_EXTENSION)) {
+        entryPoints.push(
+          (typeof path == 'string' ? path : Object.values(path).at(0))
+            .replace(`/${process.env.DIST_PATH}/`, `/${process.env.BUILD_PATH}/`)
+            .replace(CODE_FILE_EXTENSION, '.js') // .cjs → .js
+        );
+      // otherwise, as long as it is not a directory, queue it to be copied as-is from the source directory
+      } else if (!path.endsWith('/')) {
+        passthroughFiles.push(path.replace(`./${process.env.DIST_PATH}/`, `${process.env.SRC_PATH}/`));
       }
     }
-    // if the entry point is a code file, add it as an input to be processed
-    if (entryPoint.match(CODE_FILE_EXTENSION)) {
-      entryPoints.push(
-        (typeof entryPoint == 'string' ? entryPoint : Object.values(entryPoint).at(0))
-          .replace(`/${process.env.DIST_PATH}/`, `/${process.env.BUILD_PATH}/`)
-          .replace(CODE_FILE_EXTENSION, '.js') // .cjs → .js
-      );
-    // otherwise, as long as it is not a directory, queue it to be copied as-is from the source directory
-    } else if (!entryPoint.endsWith('/')) {
-      passthroughFiles.push(entryPoint.replace(`./${process.env.DIST_PATH}/`, `${process.env.SRC_PATH}/`));
+    // if this is an array export, add all entries
+    if (Array.isArray(entryPoint)) {
+      entryPoint.forEach((path) => processPath(path));
+    // if this is a conditional export, use its `import` field as the entry point
+    } else if (typeof entryPoint == 'object' && typeof entryPoint.import == 'string') {
+      processPath(entryPoint.import);
+    // if this is a string export, use it as-is
+    } else if (typeof entryPoint == 'string') {
+      processPath(entryPoint);
     }
     return entryPoints;
   }, []),

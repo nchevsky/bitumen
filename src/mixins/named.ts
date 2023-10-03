@@ -1,5 +1,5 @@
-import type Comparable from '../types/Comparable.js';
-import {type Constructor, isComparable} from '../types/index.js';
+import type Comparable from '../types/Comparable.ts';
+import {type AbstractConstructor, isComparable} from '../types/index.ts';
 
 /**
  * Augments an entity with a `name` property and name-based implementations of `Comparable`'s `compareTo()` and
@@ -7,10 +7,10 @@ import {type Constructor, isComparable} from '../types/index.js';
  * 
  * @author Nick Chevsky
  */
-export default function <T extends Constructor>(Base: T) {
+export default function <T extends AbstractConstructor>(Base: T) {
   abstract class Named extends Base implements Comparable {
     /** Name of the entity. */
-    name: string = '';
+    name = '';
 
     compareTo(another: this): number {
       return this.name.localeCompare(another.name, undefined, {sensitivity: 'base', usage: 'sort'});

@@ -5,19 +5,25 @@
     "jsx": "preserve",                                   /* Specify what JSX code is generated. */
 
     /* Modules */
-    "module": "ESNext",                                  /* Specify what module code is generated. */
-    "moduleResolution": "NodeNext",                      /* Specify how TypeScript looks up a file from a given module specifier. */
+    "allowImportingTsExtensions": true,                  /* Allows TypeScript files to import each other with a TypeScript-specific extension like .ts, .mts, or .tsx. */
+    "module": "NodeNext",                                /* Specify what module code is generated. */
     "resolveJsonModule": true,                           /* Enable importing .json files. */
 
     /* Emit */
     "declaration": true,                                 /* Generate .d.ts files from TypeScript and JavaScript files in your project. */
+    "emitDeclarationOnly": true,                         /* Only emit .d.ts files; do not emit .js files. */
     "newLine": "lf",                                     /* Set the newline character for emitting files. */
+
+    /* JavaScript Support */
+    "allowJs": true,                                     /* Allow JavaScript files to be imported inside your project, instead of just .ts and .tsx files. */
+    "checkJs": true,                                     /* Report errors in JavaScript files. */
 
     /* Interop Constraints */
     "isolatedModules": true,                             /* Ensure that each file can be safely transpiled without relying on other imports. */
 
     /* Type Checking */
     "strict": true,                                      /* Enable all strict type-checking options. */
+    "strictNullChecks": true,                            /* Produce type errors when null or undefined are used where concrete values are expected. */
 
     /* Completeness */
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */

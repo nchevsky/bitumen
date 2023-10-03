@@ -1,8 +1,8 @@
-import type {Constructor} from '../../types/index.js';
-import {named} from '../index.js';
+import type {AbstractConstructor} from '../../types/index.ts';
+import {named} from '../index.ts';
 
 describe('mixins/named', () => {
-  const make = (name: string, superclass: Constructor = class {}) => new class extends named(superclass) {
+  const make = (name: string, superclass: AbstractConstructor = class {}) => new class extends named(superclass) {
     constructor(name: string) {
       super();
       this.name = name;

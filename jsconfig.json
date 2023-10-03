@@ -2,8 +2,7 @@
   "compilerOptions": {
     "checkJs": true,
     "jsx": "preserve",
-    "module": "ESNext",
-    "moduleResolution": "NodeNext",
+    "module": "NodeNext",
     "strictNullChecks": true,
     "target": "ESNext"
   }

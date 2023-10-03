@@ -1,5 +1,5 @@
-import type Comparable from '../../types/Comparable.js';
-import SortedSet from '../SortedSet.js';
+import type Comparable from '../../types/Comparable.ts';
+import SortedSet from '../SortedSet.ts';
 
 class Value implements Comparable {
   value;

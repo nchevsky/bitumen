@@ -1,4 +1,6 @@
-import ExternallyControlledPromise from '../ExternallyControlledPromise.js';
+import ExternallyControlledPromise from '../ExternallyControlledPromise.ts';
+
+/* eslint-disable @typescript-eslint/no-floating-promises */
 
 describe('utils/ExternallyControlledPromise', () => {
   test('can be settled externally when created without an executor', () => {

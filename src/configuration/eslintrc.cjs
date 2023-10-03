@@ -70,12 +70,12 @@ module.exports = {
     },
     // TypeScript
     {
-      // https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/src/configs/strict.ts
-      extends: 'plugin:@typescript-eslint/strict',
+      // https://github.com/typescript-eslint/typescript-eslint/tree/main/packages/eslint-plugin/src/configs
+      extends: ['plugin:@typescript-eslint/strict-type-checked', 'plugin:@typescript-eslint/stylistic-type-checked'],
       files: ['*.?(c)ts?(x)'],
-      parserOptions: { // https://github.com/typescript-eslint/typescript-eslint/tree/main/packages/parser#configuration
+      parserOptions: { // https://typescript-eslint.io/packages/parser/#configuration
         ecmaVersion: 'latest',
-        project: ['./tsconfig.json']
+        project: true
       },
       rules: {
         //==============================================================================================================
@@ -102,7 +102,6 @@ module.exports = {
           'key-spacing': 'error',
           'keyword-spacing': 'error',
           'lines-between-class-members': ['error', 'always', {exceptAfterSingleLine: true}],
-          'no-duplicate-imports': 'error',
           'no-extra-semi': 'error',
           'no-invalid-this': 'error',
           'no-loop-func': 'error',
@@ -128,10 +127,18 @@ module.exports = {
           disallowTypeAnnotations: false, fixStyle: 'inline-type-imports'
         }],
         '@typescript-eslint/naming-convention': 'off', // TODO
+        '@typescript-eslint/no-confusing-void-expression': ['error', {ignoreArrowShorthand: true}],
         '@typescript-eslint/no-duplicate-type-constituents': 'error',
+        '@typescript-eslint/no-explicit-any': 'off',
         '@typescript-eslint/no-extraneous-class': 'off',
         '@typescript-eslint/no-import-type-side-effects': 'error',
+        '@typescript-eslint/no-non-null-assertion': 'off',
+        '@typescript-eslint/no-useless-empty-export': 'error',
+        '@typescript-eslint/parameter-properties': 'error',
+        '@typescript-eslint/prefer-nullish-coalescing': 'off',
         '@typescript-eslint/promise-function-async': 'error',
+        '@typescript-eslint/restrict-template-expressions': 'off',
+        '@typescript-eslint/sort-type-constituents': 'off',
         '@typescript-eslint/unified-signatures': ['error', {ignoreDifferentlyNamedParameters: true}],
 
         //==============================================================================================================
@@ -139,6 +146,16 @@ module.exports = {
         //==============================================================================================================
 
         'import/named': 'off' // redundant for TypeScript
+      }
+    },
+    // TypeScript Jest tests
+    {
+      files: ['**/__tests__/*.?(c)ts?(x)'],
+      rules: {
+        '@typescript-eslint/no-empty-function': 'off',
+        '@typescript-eslint/no-invalid-void-type': 'off',
+        '@typescript-eslint/no-unsafe-assignment': 'off',
+        '@typescript-eslint/unbound-method': 'off'
       }
     }
   ],
@@ -154,7 +171,6 @@ module.exports = {
 
     // possible problems
     'no-constant-binary-expression': 'error',
-    'no-duplicate-imports': 'error',
     'no-new-native-nonconstructor': 'error',
     'no-self-compare': 'error',
     'no-template-curly-in-string': 'error',
@@ -189,8 +205,8 @@ module.exports = {
     'no-mixed-operators': 'error',
     'no-new': 'error',
     'no-new-func': 'error',
-    'no-new-object': 'error',
     'no-new-wrappers': 'error',
+    'no-object-constructor': 'error',
     'no-octal-escape': 'error',
     'no-redeclare': 'error',
     'no-return-assign': 'error',

@@ -1,4 +1,4 @@
-import type Comparable from '../types/Comparable.js';
+import type Comparable from '../types/Comparable.ts';
 
 /**
  * Sorted implementation of `Set` which leverages `Comparable`'s `compareTo()` and `equals()`

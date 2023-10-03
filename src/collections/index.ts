@@ -1,1 +1,1 @@
-export {default as SortedSet} from './SortedSet.js';
+export {default as SortedSet} from './SortedSet.ts';

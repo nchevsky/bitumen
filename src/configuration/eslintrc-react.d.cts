@@ -3,9 +3,9 @@
  * 
  * | Plugin | Preset(s) |
  * | --- | --- |
- * | [`react`](https://github.com/jsx-eslint/eslint-plugin-react) | `all` |
+ * | [`react`](https://github.com/jsx-eslint/eslint-plugin-react#list-of-supported-rules) | `all` |
  * | [`react-hooks`](https://github.com/facebook/react/tree/main/packages/eslint-plugin-react-hooks) | `recommended` |
  * 
  * @author Nick Chevsky
  */
-export = Record<string, any>;
+export = {} as import('eslint').Linter.Config;

@@ -1,1 +1,1 @@
-export {default as named} from './named.js';
+export {default as named} from './named.ts';

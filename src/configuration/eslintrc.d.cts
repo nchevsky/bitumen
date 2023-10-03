@@ -3,10 +3,10 @@
  * 
  * | Plugin | Preset(s) |
  * | --- | --- |
- * | [`@typescript-eslint`](https://typescript-eslint.io) | `strict` |
- * | [ESLint core](https://eslint.org/docs/latest) | `recommended` |
- * | [`import`](https://github.com/import-js/eslint-plugin-import) | `recommended` |
+ * | [`@eslint/js`](https://eslint.org/docs/latest/rules/) | `recommended` |
+ * | [`@typescript-eslint`](https://typescript-eslint.io/rules/) | `strict-type-checked`, `stylistic-type-checked` |
+ * | [`import`](https://github.com/import-js/eslint-plugin-import#rules) | `recommended` |
  * 
  * @author Nick Chevsky
  */
-export = Record<string, any>;
+export = {} as import('eslint').Linter.Config;

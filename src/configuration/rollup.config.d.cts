@@ -18,4 +18,5 @@
  *          - Copies TypeScript type declarations (`.d.ts`) from `BUILD_PATH` to `DIST_PATH`, giving them a `.d.ts`
  *            extension when in ECMAScript mode and a `.d.cts` extension when in CommonJS mode.
  */
-export = (packageJson: {exports: Record<string, Record<string, string> | string>}) => import('rollup').RollupOptions;
+export = function (packageJson: {exports: Record<string, Record<string, string> | string>}):
+  import('rollup').RollupOptions { /* dummy */ };

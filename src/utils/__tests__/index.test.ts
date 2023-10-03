@@ -1,4 +1,4 @@
-import {clone, ifEmpty, nestInto} from '../index.js';
+import {clone, ifEmpty, nestInto} from '../index.ts';
 
 test('utils/clone()', () => {
   class Foo {

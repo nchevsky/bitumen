@@ -1,4 +1,4 @@
-import {isComparable, isObject} from '../index.js';
+import {isComparable, isObject} from '../index.ts';
 
 describe('types/guards', () => {
   describe('isComparable()', () => {

@@ -1,7 +1,7 @@
-import {isObject} from '../types/guards.js';
-import type {Dictionary} from '../types/index.js';
+import {isObject} from '../types/guards.ts';
+import type {Dictionary} from '../types/index.ts';
 
-export {default as ExternallyControlledPromise} from './ExternallyControlledPromise.js';
+export {default as ExternallyControlledPromise} from './ExternallyControlledPromise.ts';
 
 /**
  * Clones a given object based on its prototype, optionally injecting new and/or modifying existing
@@ -20,7 +20,7 @@ export function clone<T extends object>(
       value: typeof object[key]
     }
   }> & Record<string, PropertyDescriptor>
-): T {
+): T { // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return Object.create(object, {...Object.getOwnPropertyDescriptors(object), ...propertyDescriptors});
 }
 
@@ -39,7 +39,7 @@ export function clone<T extends object>(
  * @param substitute Default/fallback value to return if `value` is empty.
  * @returns `value` if non-empty, or `substitute` if `value` is empty.
  */
-export function ifEmpty<V extends unknown>(value: V, substitute: V) {
+export function ifEmpty<V>(value: V, substitute: V) {
   if (Array.isArray(value)) {
     return value.length ? value : substitute;
   } else if (typeof value == 'number') {

@@ -102,6 +102,7 @@ The following environment variables must be set at runtime:
 `bitumen` exposes named exports from the following entry points:
 
 - `collections`
+- `configuration`
 - `mixins`
 - `types`
 - `utils`
@@ -122,7 +123,7 @@ For proper module and type resolution, use the following project settings:
 {
   "compilerOptions": {
     "checkJs": true,
-    "moduleResolution": "NodeNext",
+    "module": "NodeNext",
     "strictNullChecks": true // optional but recommended
   }
 }
@@ -132,7 +133,7 @@ For proper module and type resolution, use the following project settings:
 ```jsonc
 {
   "compilerOptions": {
-    "moduleResolution": "NodeNext"
+    "module": "NodeNext"
   }
 }
 ```
