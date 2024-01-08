@@ -3,6 +3,7 @@
     "checkJs": true,
     "jsx": "preserve",
     "module": "NodeNext",
+    "noUncheckedIndexedAccess": true,
     "strictNullChecks": true,
     "target": "ESNext"
   }

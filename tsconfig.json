@@ -22,6 +22,7 @@
     "isolatedModules": true,                             /* Ensure that each file can be safely transpiled without relying on other imports. */
 
     /* Type Checking */
+    "noUncheckedIndexedAccess": true,                    /* Include `undefined` in index signature types (e.g. arrays). */
     "strict": true,                                      /* Enable all strict type-checking options. */
     "strictNullChecks": true,                            /* Produce type errors when null or undefined are used where concrete values are expected. */
 

@@ -6,11 +6,8 @@
 module.exports = {
   plugins: [
     ['@babel/plugin-syntax-import-attributes', {deprecatedAssertSyntax: true}],
-    ['replace-import-extension', {
-      extMapping: process.env.ENV == 'jest'
-        ? {'.js': '', '.jsx': '', '.ts': '', '.tsx': ''}
-        : {'.tsx': '.js'} // TODO: remove if ever handled by `@babel/preset-typescript`'s `rewriteImportExtensions`
-    }]
+    process.env.ENV == 'jest'
+      && ['replace-import-extension', {extMapping: {'.js': '', '.jsx': '', '.ts': '', '.tsx': ''}}]
   ].filter(Boolean),
   presets: [
     ['@babel/preset-env', {
@@ -27,7 +24,7 @@ module.exports = {
     }],
     ['@babel/preset-typescript', {
       allowDeclareFields: true, // TODO: will be enabled by default in Babel 8
-      rewriteImportExtensions: true // .?(c|m)ts → .?(c|m)js
+      rewriteImportExtensions: true // .?(c|m)ts?(x) → .?(c|m)js
     }]
   ]
 };

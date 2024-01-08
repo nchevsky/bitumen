@@ -133,12 +133,16 @@ module.exports = {
         '@typescript-eslint/no-extraneous-class': 'off',
         '@typescript-eslint/no-import-type-side-effects': 'error',
         '@typescript-eslint/no-non-null-assertion': 'off',
+        '@typescript-eslint/no-unsafe-unary-minus': 'error',
         '@typescript-eslint/no-useless-empty-export': 'error',
         '@typescript-eslint/parameter-properties': 'error',
         '@typescript-eslint/prefer-nullish-coalescing': 'off',
         '@typescript-eslint/promise-function-async': 'error',
         '@typescript-eslint/restrict-template-expressions': 'off',
         '@typescript-eslint/sort-type-constituents': 'off',
+        '@typescript-eslint/switch-exhaustiveness-check': ['error', {
+          allowDefaultCaseForExhaustiveSwitch: false, requireDefaultForNonUnion: true
+        }],
         '@typescript-eslint/unified-signatures': ['error', {ignoreDifferentlyNamedParameters: true}],
 
         //==============================================================================================================

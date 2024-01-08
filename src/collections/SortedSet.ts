@@ -25,7 +25,7 @@ export default class SortedSet<V extends Comparable> implements Set<V> {
     const successorIndex = this.elements.findIndex((element) => element.compareTo(value) >= 0);
     if (successorIndex == -1) {
       this.elements.push(value);
-    } else if (!this.elements[successorIndex].equals(value)) {
+    } else if (!this.elements[successorIndex]!.equals(value)) {
       this.elements.splice(successorIndex, 0, value);
     }
     return this;
