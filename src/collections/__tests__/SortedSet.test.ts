@@ -12,8 +12,8 @@ class Value implements Comparable {
 }
 
 describe('collections/SortedSet', () => {
-  const makeSet = (values?: Iterable<Value>) => new class extends SortedSet<Value> {
-    getValues() { return this.elements.map((element) => element.value); }
+  const makeSet = <V extends Value | number | string>(values?: Iterable<V>) => new class extends SortedSet<V> {
+    getValues() { return this.elements.map((element) => typeof element == 'object' ? element.value : element); }
   }(values);
 
   test('[Symbol.iterator]()', () => {
@@ -31,14 +31,29 @@ describe('collections/SortedSet', () => {
   });
 
   describe('add()', () => {
-    test('adds each unique value only once', () => {
-      const value = new Value('foo');
-      expect(makeSet().add(value).add(value).getValues()).toEqual(['foo']);
+    describe('adds each unique value only once', () => {
+      test('objects', () => {
+        const value = new Value('foo');
+        expect(makeSet().add(value).add(value).getValues()).toEqual(['foo']);
+      });
+
+      test('primitives', () =>
+        expect(makeSet().add(123).add(123).getValues()).toEqual([123]));
     });
 
-    test('adds values in the right order', () => expect(
-      makeSet().add(new Value('baz')).add(new Value('qux')).add(new Value('foo')).add(new Value('bar')).getValues()
-    ).toEqual(['bar', 'baz', 'foo', 'qux']));
+    describe('adds values in the right order', () => {
+      test('numbers', () => expect(
+        makeSet().add(2).add(4).add(3).add(1).getValues()
+      ).toEqual([1, 2, 3, 4]));
+
+      test('objects', () => expect(
+        makeSet().add(new Value('baz')).add(new Value('qux')).add(new Value('foo')).add(new Value('bar')).getValues()
+      ).toEqual(['bar', 'baz', 'foo', 'qux']));
+
+      test('strings', () => expect(
+        makeSet().add('baz').add('qux').add('foo').add('bar').getValues()
+      ).toEqual(['bar', 'baz', 'foo', 'qux']));
+    });
   });
 
   test('clear()', () => {

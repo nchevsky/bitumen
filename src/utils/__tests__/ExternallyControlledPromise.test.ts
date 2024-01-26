@@ -1,18 +1,16 @@
 import ExternallyControlledPromise from '../ExternallyControlledPromise.ts';
 
-/* eslint-disable @typescript-eslint/no-floating-promises */
-
 describe('utils/ExternallyControlledPromise', () => {
-  test('can be settled externally when created without an executor', () => {
-    expect(new ExternallyControlledPromise().reject('foo')).rejects.toEqual('foo');
-    expect(new ExternallyControlledPromise().resolve('foo')).resolves.toEqual('foo');
+  test('can be settled externally when created without an executor', async () => {
+    await expect(new ExternallyControlledPromise().reject(new Error('❌'))).rejects.toThrow('❌');
+    await expect(new ExternallyControlledPromise().resolve('✔️')).resolves.toEqual('✔️');
   });
 
-  test('behaves like a standard promise when created with an executor', () => {
-    const promise = new ExternallyControlledPromise((resolve) => resolve('foo'));
+  test('behaves like a standard promise when created with an executor', async () => {
+    const promise = new ExternallyControlledPromise((resolve) => resolve('✔️'));
 
-    expect(() => { promise.reject(); }).toThrow(); // not externally controllable
-    expect(() => { promise.resolve(''); }).toThrow(); // not externally controllable
-    expect(promise).resolves.toEqual('foo');
+    expect(() => { void promise.reject(new Error()); }).toThrow(/cannot be settled externally/);
+    expect(() => { void promise.resolve(''); }).toThrow(/cannot be settled externally/);
+    await expect(promise).resolves.toEqual('✔️');
   });
 });

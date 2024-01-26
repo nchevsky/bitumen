@@ -126,7 +126,6 @@ module.exports = {
         '@typescript-eslint/consistent-type-imports': ['error', {
           disallowTypeAnnotations: false, fixStyle: 'inline-type-imports'
         }],
-        '@typescript-eslint/naming-convention': 'off', // TODO
         '@typescript-eslint/no-confusing-void-expression': ['error', {ignoreArrowShorthand: true}],
         '@typescript-eslint/no-duplicate-type-constituents': 'error',
         '@typescript-eslint/no-explicit-any': 'off',
@@ -236,7 +235,6 @@ module.exports = {
     'prefer-numeric-literals': 'error',
     'prefer-object-has-own': 'error',
     'prefer-object-spread': 'error',
-    'prefer-promise-reject-errors': 'error',
     'prefer-regex-literals': 'error',
     'prefer-rest-params': 'error',
     'prefer-spread': 'error',

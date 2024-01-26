@@ -16,7 +16,7 @@ export default class ExternallyControlledPromise<T> extends Promise<T> {
    * @returns The settled promise.
    */
   reject(reason?: Parameters<Rejecter<T>>[0]) {
-    this.#reject(reason);
+    this.#reject(reason); // eslint-disable-line @typescript-eslint/prefer-promise-reject-errors
     return this;
   }
 

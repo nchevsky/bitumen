@@ -6,7 +6,7 @@ import type Comparable from '../types/Comparable.ts';
  * 
  * @author Nick Chevsky
  */
-export default class SortedSet<V extends Comparable> implements Set<V> {
+export default class SortedSet<V extends Comparable | number | string> implements Set<V> {
   protected elements: Array<V> = [];
 
   constructor(values?: Iterable<V>) {
@@ -22,21 +22,33 @@ export default class SortedSet<V extends Comparable> implements Set<V> {
   }
 
   add(value: V): this {
-    const successorIndex = this.elements.findIndex((element) => element.compareTo(value) >= 0);
+    const successorIndex = this.elements.findIndex((element) => this.#compare(element, value) >= 0);
     if (successorIndex == -1) {
       this.elements.push(value);
-    } else if (!this.elements[successorIndex]!.equals(value)) {
+    } else if (!this.#areEqual(this.elements[successorIndex]!, value)) {
       this.elements.splice(successorIndex, 0, value);
     }
     return this;
+  }
+
+  #areEqual(valueA: V, valueB: V) { // eslint-disable-line class-methods-use-this -- statics can't use class type args
+    return typeof valueA == 'object' ? valueA.equals(valueB as Comparable) : valueA === valueB;
   }
 
   clear() {
     this.elements.splice(0);
   }
 
+  #compare(valueA: V, valueB: V) { // eslint-disable-line class-methods-use-this -- statics can't use class type args
+    return typeof valueA == 'object'
+      ? valueA.compareTo(valueB as Comparable)
+      : typeof valueA == 'number'
+        ? (valueA < (valueB as number) ? -1 : (valueA > (valueB as number) ? 1 : 0))
+        : valueA.localeCompare(valueB as string);
+  }
+
   delete(value: V): boolean {
-    const index = this.elements.findIndex((element) => element.equals(value));
+    const index = this.elements.findIndex((element) => this.#areEqual(element, value));
     if (index != -1) {
       this.elements.splice(index, 1);
       return true;
@@ -53,7 +65,7 @@ export default class SortedSet<V extends Comparable> implements Set<V> {
   }
 
   has(value: V): boolean {
-    return this.elements.some((element) => element.equals(value));
+    return this.elements.some((element) => this.#areEqual(element, value));
   }
 
   keys(): IterableIterator<V> {
