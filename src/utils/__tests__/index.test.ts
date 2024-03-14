@@ -1,20 +1,45 @@
 import {clone, ifEmpty, nestInto} from '../index.ts';
 
-test('utils/clone()', () => {
-  class Foo {
-    get negativeValue() { return -this.originalValue; }
-    readonly originalValue: number;
-
-    constructor(value: number) {
-      this.originalValue = value;
-    }
+describe('utils/clone()', () => {
+  class Subject {
+    get negatingGetter() { return -this.value; }
+    set negatingSetter(value: typeof this.value) { this.value = -value; }
+    value = 1;
   }
 
-  const twin = clone(new Foo(1), {newProperty: {value: 'foo'}, originalValue: {value: 2}});
-  expect(twin.negativeValue).toEqual(-2); // preserves getter
-  expect('newProperty' in twin).toBeTruthy(); // adds new property
-  if ('newProperty' in twin) expect(twin.newProperty).toEqual('foo');
-  expect(twin.originalValue).toEqual(2); // overwrites original value
+  test('can add a new property without affecting existing ones', () => {
+    const twin = clone(new Subject(), {newProperty: {value: 'foo'}});
+
+    expect<string>(twin.newProperty).toEqual('foo'); // new
+    expect<number>(twin.value).toEqual(1); // existing
+  });
+
+  test('can modify an existing property without affecting the rest', () => {
+    const twin = clone(new Subject(), {value: {get: () => '2'}});
+
+    expect<number>(twin.negatingGetter).toEqual(-2); // unaffected
+    expect<string>(twin.value).toEqual('2'); // modified
+  });
+
+  test('keeps all properties the same when called with no `propertyDescriptors`', () => {
+    const twin = clone(new Subject());
+
+    expect<number>(twin.negatingGetter).toEqual(-1);
+    twin.negatingSetter = 2;
+    expect<number>(twin.value).toEqual(-2);
+  });
+
+  test('passes the object being cloned to the `propertyDescriptors` callback', () => {
+    const propertyDescriptors = {foo: {value: 'bar'}};
+    const propertyDescriptorsCallback = jest.fn(() => propertyDescriptors);
+    const subject = new Subject();
+
+    jest.spyOn(Object, 'create');
+    clone(subject, propertyDescriptorsCallback);
+
+    expect(Object.create).toHaveBeenCalledWith(expect.any(Object), expect.objectContaining(propertyDescriptors));
+    expect(propertyDescriptorsCallback).toHaveBeenCalledWith(subject);
+  });
 });
 
 describe('utils/ifEmpty()', () => {

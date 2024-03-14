@@ -1,6 +1,16 @@
 import {isObject} from '../types/guards.ts';
 import type {Dictionary} from '../types/index.ts';
 
+type Clone<O, PD> = Omit<O, keyof PD> & {
+  [K in keyof PD]: PD[K] extends {get: () => infer V}
+    ? V
+    : PD[K] extends {set: (value: infer V) => void}
+      ? V
+      : PD[K] extends {value: infer V} ? V : undefined
+};
+
+type PropertyDescriptors<O extends object> = {[key in keyof O]?: PropertyDescriptor};
+
 export {default as ExternallyControlledPromise} from './ExternallyControlledPromise.ts';
 
 /**
@@ -9,19 +19,26 @@ export {default as ExternallyControlledPromise} from './ExternallyControlledProm
  * retain getters, setters, and other special members.
  * 
  * @param object Object to be cloned.
- * @param propertyDescriptors New properties to be added and/or existing properties to be overwritten.
+ * @param propertyDescriptors An object—or a function that returns an object—containing new properties
+ *                            to be added and/or existing properties to be overwritten. If a function is
+ *                            given, it receives as an argument a reference to `object`.
  */
-export function clone<T extends object>(
-  object: T,
-  propertyDescriptors?: Partial<{
-    [key in keyof T]: Omit<PropertyDescriptor, 'get' | 'set' | 'value'> & {
-      get?(): typeof object[key],
-      set?(value: typeof object[key]): void,
-      value: typeof object[key]
-    }
-  }> & Record<string, PropertyDescriptor>
-): T { // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-  return Object.create(object, {...Object.getOwnPropertyDescriptors(object), ...propertyDescriptors});
+export function clone<O extends object>(object: O): O;
+export function clone<O extends object, PD = PropertyDescriptors<O>>(
+  object: O, propertyDescriptors: PD & PropertyDescriptorMap
+): Clone<O, PD>;
+export function clone<O extends object, PD = PropertyDescriptors<O>>(
+  // eslint-disable-next-line @typescript-eslint/unified-signatures -- combining signatures breaks typings
+  object: O, propertyDescriptors: (object: O) => PD & PropertyDescriptorMap
+): Clone<O, PD>;
+export function clone<O extends object, PD = PropertyDescriptors<O>>(
+  object: O,
+  propertyDescriptors?: (PD & PropertyDescriptorMap) | ((object: O) => PD & PropertyDescriptorMap)
+): Clone<O, PD> {
+  return Object.create(object, { // eslint-disable-line @typescript-eslint/no-unsafe-return
+    ...Object.getOwnPropertyDescriptors(object),
+    ...typeof propertyDescriptors == 'function' ? propertyDescriptors(object) : propertyDescriptors
+  });
 }
 
 /**

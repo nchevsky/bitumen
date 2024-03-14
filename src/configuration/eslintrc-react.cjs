@@ -25,6 +25,7 @@ module.exports = {
   rules: {
     // https://github.com/jsx-eslint/eslint-plugin-react#list-of-supported-rules
     'react/boolean-prop-naming': 'off',
+    'react/checked-requires-onchange-or-readonly': 'error',
     'react/destructuring-assignment': ['error', 'never'],
     'react/forbid-component-props': ['error', {forbid: ['style']}],
     'react/forbid-dom-props': ['error', {forbid: ['style']}],
@@ -32,6 +33,7 @@ module.exports = {
     'react/no-adjacent-inline-elements': 'off',
     'react/no-multi-comp': ['error', {ignoreStateless: true}],
     'react/no-set-state': 'off', // does not apply to function components
+    'react/no-unknown-property': ['error', {requireDataLowercase: true}],
     'react/no-unstable-nested-components': ['error', {allowAsProps: true}],
     'react/prefer-read-only-props': 'off',
     // too problematic for function, object prop types; default props being deprecated for function components
@@ -43,7 +45,9 @@ module.exports = {
     'react/jsx-closing-bracket-location': ['error', 'line-aligned'],
     'react/jsx-closing-tag-location': 'off', // until it gains a `line-aligned` knob like `jsx-closing-bracket-location`
     'react/jsx-curly-brace-presence': ['error', {children: 'never', propElementValues: 'always', props: 'never'}],
-    'react/jsx-filename-extension': 'off',
+    'react/jsx-filename-extension': ['error', {
+      allow: 'as-needed', extensions: ['.jsx', '.tsx'], ignoreFilesWithoutCode: true
+    }],
     'react/jsx-indent': ['error', 2, {checkAttributes: true, indentLogicalExpressions: true}],
     'react/jsx-indent-props': ['error', 2],
     'react/jsx-key': ['error', {warnOnDuplicates: true}],
