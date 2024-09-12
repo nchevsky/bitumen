@@ -5,6 +5,8 @@ type Resolver<T> = Parameters<Executor<T>>[0];
 /**
  * Implementation of `Promise` that can be externally resolved or rejected on demand via the
  * `reject()` or `resolve()` instance methods.
+ * 
+ * @deprecated Use `Promise.withResolvers()` instead.
  */
 export default class ExternallyControlledPromise<T> extends Promise<T> {
   #reject: Rejecter<T>;
@@ -33,6 +35,7 @@ export default class ExternallyControlledPromise<T> extends Promise<T> {
   /**
    * Creates a promise that can be externally resolved or rejected via the `reject()` or `resolve()` methods.
    * 
+   * @deprecated Use `Promise.withResolvers()` instead.
    * @param executor ⛔ **Must be omitted in order for the promise to be externally controllable.**
    *                 The JavaScript runtime requires that promise constructors declare this argument. If
    *                 supplied, the instance will behave like a standard promise and be driven exclusively

@@ -1,118 +1,161 @@
+import {describe, expect, test} from 'vitest';
+
 import type Comparable from '../../types/Comparable.ts';
 import SortedSet from '../SortedSet.ts';
 
-class Value implements Comparable {
+class Element implements Comparable {
   value;
 
   constructor(value: string) { this.value = value; }
 
-  get [Symbol.toStringTag](): string { return `Value='${this.value}'`; }
   compareTo(another: this): number { return this.value.localeCompare(another.value); }
   equals(another: this): boolean { return this.value == another.value; }
 }
 
 describe('collections/SortedSet', () => {
-  const makeSet = <V extends Value | number | string>(values?: Iterable<V>) => new class extends SortedSet<V> {
-    getValues() { return this.elements.map((element) => typeof element == 'object' ? element.value : element); }
-  }(values);
-
   test('[Symbol.iterator]()', () => {
-    const value = new Value('foo');
-    const iterator = makeSet([value])[Symbol.iterator]();
-    expect(iterator.next().value).toBe(value);
-    expect(iterator.next().done).toBeTruthy();
+    expect.assertions(1);
+    for (const entry of new SortedSet(['foo'])) expect(entry).toEqual('foo');
   });
 
-  test('[Symbol.toStringTag]()', () => {
-    const value1 = new Value('bar');
-    const value2 = new Value('foo');
-    // eslint-disable-next-line @typescript-eslint/no-base-to-string
-    expect(`${makeSet([value1, value2])}`).toBe(`[object SortedSet=[${value1}, ${value2}]]`);
-  });
+  test('[Symbol.toStringTag]()', () => // eslint-disable-next-line @typescript-eslint/no-base-to-string
+    expect(`${new SortedSet(['bar', 'foo'])}`).toEqual('[object SortedSet=[bar, foo]]'));
 
   describe('add()', () => {
-    describe('adds each unique value only once', () => {
-      test('objects', () => {
-        const value = new Value('foo');
-        expect(makeSet().add(value).add(value).getValues()).toEqual(['foo']);
-      });
+    describe('inserts each unique value no more than once', () => {
+      test('numbers', () => expect(Array.from(new SortedSet().add(1).add(1))).toEqual([1]));
 
-      test('primitives', () =>
-        expect(makeSet().add(123).add(123).getValues()).toEqual([123]));
+      test('strings', () => expect(Array.from(new SortedSet().add('foo').add('foo'))).toEqual(['foo']));
+
+      test('objects', () => {
+        const element = new Element('foo');
+        expect(Array.from(new SortedSet().add(element).add(element))).toMatchObject([{value: 'foo'}]);
+      });
     });
 
-    describe('adds values in the right order', () => {
-      test('numbers', () => expect(
-        makeSet().add(2).add(4).add(3).add(1).getValues()
-      ).toEqual([1, 2, 3, 4]));
+    describe('inserts values in the right order', () => {
+      test('numbers', () => expect(Array.from(new SortedSet().add(3).add(1).add(2))).toEqual([1, 2, 3]));
 
-      test('objects', () => expect(
-        makeSet().add(new Value('baz')).add(new Value('qux')).add(new Value('foo')).add(new Value('bar')).getValues()
-      ).toEqual(['bar', 'baz', 'foo', 'qux']));
+      test('objects', () =>
+        expect(Array.from(new SortedSet().add(new Element('qux')).add(new Element('bar')).add(new Element('foo'))))
+          .toMatchObject([{value: 'bar'}, {value: 'foo'}, {value: 'qux'}]));
 
-      test('strings', () => expect(
-        makeSet().add('baz').add('qux').add('foo').add('bar').getValues()
-      ).toEqual(['bar', 'baz', 'foo', 'qux']));
+      test('strings', () =>
+        expect(Array.from(new SortedSet().add('qux').add('bar').add('foo'))).toEqual(['bar', 'foo', 'qux']));
     });
   });
 
   test('clear()', () => {
-    const set = makeSet([new Value('foo')]);
+    const set = new SortedSet(['bar', 'foo']);
+
+    expect(Array.from(set)).toEqual(['bar', 'foo']);
     set.clear();
-    expect(set.getValues()).toEqual([]);
+    expect(Array.from(set)).toEqual([]);
   });
 
-  test('constructor()', () => expect(makeSet([new Value('foo')]).getValues()).toEqual(['foo']));
+  test('constructor()', () => expect(Array.from(new SortedSet(['foo']))).toEqual(['foo']));
 
   describe('delete()', () => {
-    test('does nothing and returns false when the given value is not in the set', () => {
-      const set = makeSet([new Value('foo')]);
-      expect(set.delete(new Value('bar'))).toBe(false);
-      expect(set.getValues()).toEqual(['foo']);
+    test('removes the given value and returns `true` when the given value is in the set', () => {
+      const set = new SortedSet(['foo']);
+
+      expect(set.delete('foo')).toEqual(true);
+      expect(Array.from(set)).toEqual([]);
     });
 
-    test('deletes the given value and returns true when the given value is in the set', () => {
-      const value = new Value('foo');
-      const set = makeSet([value]);
-      expect(set.delete(value)).toBe(true);
-      expect(set.getValues()).toEqual([]);
+    test('does nothing and returns `false` when the given value isn\'t in the set', () => {
+      const set = new SortedSet<string>(['foo']);
+
+      expect(set.delete('bar')).toEqual(false);
+      expect(Array.from(set)).toEqual(['foo']);
     });
   });
 
-  test('entries()', () => {
-    const value = new Value('foo');
-    expect(Array.from(makeSet([value]).entries())).toEqual([[value, value]]);
+  test('difference() returns elements in A not in B', () =>
+    expect(Array.from(new SortedSet<string>(['bar', 'baz', 'foo']).difference(new SortedSet<string>(['bar', 'baz']))))
+      .toEqual(['foo']));
+
+  test('entries()', () => expect(Array.from(new SortedSet(['foo']).entries())).toEqual([['foo', 'foo']]));
+
+  test('intersection() returns elements in both A and B', () => {
+    // A larger than B
+    expect(Array.from(new SortedSet<string>(['bar', 'baz', 'foo']).intersection(new SortedSet(['foo', 'qux']))))
+      .toEqual(['foo']);
+    // B larger than A
+    expect(Array.from(new SortedSet<string>(['bar', 'foo']).intersection(new SortedSet(['baz', 'foo', 'qux']))))
+      .toEqual(['foo']);
   });
 
-  test('keys()', () => {
-    const value = new Value('foo');
-    expect(Array.from(makeSet([value]).keys())).toEqual([value]);
+  describe('isDisjointFrom()', () => {
+    test('returns `false` when A and B have elements in common', () => {
+      // A larger than B
+      expect(new SortedSet<string>(['bar', 'baz', 'foo']).isDisjointFrom(new SortedSet(['foo', 'qux']))).toEqual(false);
+      // B larger than A
+      expect(new SortedSet<string>(['bar', 'baz']).isDisjointFrom(new SortedSet(['baz', 'foo', 'qux']))).toEqual(false);
+    });
+
+    test('returns `true` when A and B don\'t have elements in common', () => {
+      // A larger than B
+      expect(new SortedSet<string>(['bar', 'baz', 'foo']).isDisjointFrom(new SortedSet(['qux']))).toEqual(true);
+      // B larger than A
+      expect(new SortedSet<string>(['bar']).isDisjointFrom(new SortedSet(['baz', 'foo', 'qux']))).toEqual(true);
+    });
   });
+
+  describe('isSubsetOf()', () => {
+    test('returns `false` when B doesn\'t contain all elements in A', () => {
+      // A larger than B
+      expect(new SortedSet<string>(['bar', 'baz', 'foo']).isSubsetOf(new SortedSet(['bar', 'baz']))).toEqual(false);
+      // B larger than A
+      expect(new SortedSet<string>(['bar', 'baz']).isSubsetOf(new SortedSet(['baz', 'foo', 'qux']))).toEqual(false);
+    });
+
+    test('returns `true` when B contains all elements in A', () =>
+      expect(new SortedSet<string>(['bar', 'baz']).isSubsetOf(new SortedSet(['bar', 'baz', 'foo']))).toEqual(true));
+  });
+
+  describe('isSupersetOf()', () => {
+    test('returns `false` when A doesn\'t contain all elements in B', () => {
+      // A larger than B
+      expect(new SortedSet<string>(['bar', 'baz', 'foo']).isSupersetOf(new SortedSet(['foo', 'qux']))).toEqual(false);
+      // B larger than A
+      expect(new SortedSet<string>(['bar', 'baz']).isSupersetOf(new SortedSet(['bar', 'baz', 'foo']))).toEqual(false);
+    });
+
+    test('returns `true` when A contains all elements in B', () =>
+      expect(new SortedSet<string>(['bar', 'baz', 'foo']).isSupersetOf(new SortedSet(['baz', 'foo']))).toEqual(true));
+  });
+
+  test('keys()', () => expect(Array.from(new SortedSet(['foo']).keys())).toEqual(['foo']));
 
   test('forEach()', () => {
-    const value = new Value('foo');
-    const set = makeSet([value]);
-    set.forEach((_key, _value, _set) => {
-      expect(_key).toBe(value);
-      expect(_value).toBe(value);
+    expect.assertions(3);
+
+    const set = new SortedSet(['foo']);
+    set.forEach((value, key, _set) => {
+      expect(key).toEqual('foo');
+      expect(value).toEqual('foo');
       expect(_set).toBe(set);
     });
   });
 
   describe('has()', () => {
-    test('returns true when the given value is in the set', () => {
-      const value = new Value('foo');
-      expect(makeSet([value]).has(value)).toBe(true);
-    });
+    test('returns `false` when the given value isn\'t in the set', () =>
+      expect(new SortedSet().has('foo')).toEqual(false));
 
-    test('returns false when the given value is not in the set', () =>
-      expect(makeSet().has(new Value('foo'))).toBe(false));
+    test('returns `true` when the given value is in the set', () =>
+      expect(new SortedSet(['foo']).has('foo')).toEqual(true));
   });
 
-  test('size', () => expect(makeSet([new Value('foo')]).size).toBe(1));
+  test('size', () => expect(new SortedSet(['bar', 'foo']).size).toEqual(2));
 
-  test('values()', () => {
-    const value = new Value('foo');
-    expect(Array.from(makeSet([value]).values())).toEqual([value]);
-  });
+  test('symmetricDifference() returns elements in A not in B + elements in B not in A', () =>
+    expect(Array.from(new SortedSet<string>(['bar', 'foo']).symmetricDifference(new SortedSet(['foo', 'qux']))))
+      .toEqual(['bar', 'qux']));
+
+  test('union() returns all elements in both A and B', () =>
+    expect(Array.from(new SortedSet<string>(['bar', 'baz']).union(new SortedSet(['foo', 'qux']))))
+      .toEqual(['bar', 'baz', 'foo', 'qux']));
+
+  test('values()', () => expect(Array.from(new SortedSet(['foo']).values())).toEqual(['foo']));
 });

@@ -1,3 +1,5 @@
+import {describe, expect, test} from 'vitest';
+
 import type {AbstractConstructor} from '../../types/index.ts';
 import {named} from '../index.ts';
 

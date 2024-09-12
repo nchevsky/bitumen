@@ -1,3 +1,7 @@
+/* eslint-disable import-x/no-deprecated */
+
+import {describe, expect, test} from 'vitest';
+
 import ExternallyControlledPromise from '../ExternallyControlledPromise.ts';
 
 describe('utils/ExternallyControlledPromise', () => {

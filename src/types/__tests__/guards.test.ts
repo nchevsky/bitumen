@@ -1,3 +1,5 @@
+import {describe, expect, test} from 'vitest';
+
 import {isComparable, isObject} from '../index.ts';
 
 describe('types/guards', () => {

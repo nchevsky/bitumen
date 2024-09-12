@@ -1,33 +1,21 @@
 {
+  // https://www.typescriptlang.org/tsconfig/
   "compilerOptions": {
-    /* Language and Environment */
-    "target": "ESNext",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
-    "jsx": "preserve",                                   /* Specify what JSX code is generated. */
-
-    /* Modules */
-    "allowImportingTsExtensions": true,                  /* Allows TypeScript files to import each other with a TypeScript-specific extension like .ts, .mts, or .tsx. */
-    "module": "NodeNext",                                /* Specify what module code is generated. */
-    "resolveJsonModule": true,                           /* Enable importing .json files. */
-
-    /* Emit */
-    "declaration": true,                                 /* Generate .d.ts files from TypeScript and JavaScript files in your project. */
-    "emitDeclarationOnly": true,                         /* Only emit .d.ts files; do not emit .js files. */
-    "newLine": "lf",                                     /* Set the newline character for emitting files. */
-
-    /* JavaScript Support */
-    "allowJs": true,                                     /* Allow JavaScript files to be imported inside your project, instead of just .ts and .tsx files. */
-    "checkJs": true,                                     /* Report errors in JavaScript files. */
-
-    /* Interop Constraints */
-    "isolatedModules": true,                             /* Ensure that each file can be safely transpiled without relying on other imports. */
-
-    /* Type Checking */
-    "noUncheckedIndexedAccess": true,                    /* Include `undefined` in index signature types (e.g. arrays). */
-    "strict": true,                                      /* Enable all strict type-checking options. */
-    "strictNullChecks": true,                            /* Produce type errors when null or undefined are used where concrete values are expected. */
-
-    /* Completeness */
-    "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
+    "allowImportingTsExtensions": true,
+    "allowJs": true,
+    "checkJs": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "module": "NodeNext",
+    "newLine": "lf",
+    "noUncheckedIndexedAccess": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "target": "ESNext"
   },
-  "include": ["./src/"]
+  "include": ["${configDir}/src"] // `${configDir}` supported since v5.5.0
 }

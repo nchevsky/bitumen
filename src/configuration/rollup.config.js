@@ -2,10 +2,15 @@ import copy from 'rollup-plugin-copy';
 
 const CODE_FILE_EXTENSION = /\.c?js$/;
 
+/** @type {Array<string>} */
 const passthroughFiles = [];
 
-export default (packageJson) => ({
-  input: Object.values(packageJson.exports).reduce((entryPoints, entryPoint) => {
+/**
+ * @param {{exports?: Record<string, Array<string> | {import?: string} | string>}} pkg Contents of `package.json`.
+ * @returns {import('rollup').RollupOptions}
+ */
+const configure = (pkg) => ({
+  input: Object.values(pkg.exports ?? {}).reduce((/** @type {Array<string>} */ entryPoints, entryPoint) => {
     function processPath(/** @type {string} */ path) {
       // if this is a code file, add it as an input to be processed
       if (path.match(CODE_FILE_EXTENSION)) {
@@ -36,17 +41,17 @@ export default (packageJson) => ({
     entryFileNames: (chunkInfo) => process.env.FORMAT == 'cjs' ? '[name].cjs' : '[name].[ext]',
     esModule: process.env.FORMAT == 'es',
     exports: 'auto',
-    format: process.env.FORMAT,
+    format: process.env.FORMAT == 'cjs' ? 'cjs' : 'es',
     generatedCode: 'es2015',
     preserveModules: true,
     preserveModulesRoot: process.env.BUILD_PATH
   },
   plugins: [
-    copy({
-      filter: (src, dest) => !/__.+?__/.exec(src), // exclude Jest mocks and tests
+    (/** @type {typeof copy.default} */ (/** @type {unknown} */ (copy)))({
+      filter: (src, dest) => !/__.+?__/.exec(src), // exclude Jest/Vitest mocks and tests
       flatten: false,
       targets: [{
-        dest: process.env.DIST_PATH,
+        dest: `${process.env.DIST_PATH}`,
         rename: (name, extension, path) => // when in CommonJS mode, (.js, .d.ts]) → (.cjs, .d.cts)
           `${name}.${extension == 'ts' && process.env.FORMAT == 'cjs' ? 'c' : ''}${extension}`,
         src: [
@@ -58,3 +63,6 @@ export default (packageJson) => ({
     })
   ]
 });
+
+// must be exported in a separate statement in order for `tsc` to preserve JSDoc
+export default configure;

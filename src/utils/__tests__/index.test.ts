@@ -1,3 +1,5 @@
+import {describe, expect, test, vi} from 'vitest';
+
 import {clone, ifEmpty, nestInto} from '../index.ts';
 
 describe('utils/clone()', () => {
@@ -31,10 +33,10 @@ describe('utils/clone()', () => {
 
   test('passes the object being cloned to the `propertyDescriptors` callback', () => {
     const propertyDescriptors = {foo: {value: 'bar'}};
-    const propertyDescriptorsCallback = jest.fn(() => propertyDescriptors);
+    const propertyDescriptorsCallback = vi.fn(() => propertyDescriptors);
     const subject = new Subject();
 
-    jest.spyOn(Object, 'create');
+    vi.spyOn(Object, 'create');
     clone(subject, propertyDescriptorsCallback);
 
     expect(Object.create).toHaveBeenCalledWith(expect.any(Object), expect.objectContaining(propertyDescriptors));

@@ -1,63 +1,70 @@
 /**
  * Generates `@typescript-eslint` overrides for a given set of ESLint core rules.
  * 
- * @param {Record<string, Array | string>} rules - Object whose keys are the names of core rules to override, and
- *                                                 each value either a severity level or a severity + options array.
- * @returns {Record<string, Array | string>} Object with two rules for each rule given in `rules`:
- *                                           1. the overridden ESLint core rule set to _'off'_, and
- *                                           2. the overriding `@typescript-eslint` rule with the given severity
- *                                             level and any options.
+ * @param {import('eslint').Linter.RulesRecord} rules Object whose keys are the names of core rules to override, and
+ *                                                    each value either a severity level or severity + options array.
+ * @returns {import('eslint').Linter.RulesRecord} Object with two rules for each rule given in `rules`:
+ *                                                1. the overridden ESLint core rule set to _'off'_, and
+ *                                                2. the overriding `@typescript-eslint` rule with the given severity
+ *                                                   level and any options.
  */
 function overrideForTypeScript(rules) {
-  return Object.fromEntries(Object.entries(rules).reduce((overrides, [name, options]) => {
-    overrides.push([name, 'off'], [`@typescript-eslint/${name}`, options]);
-    return overrides;
-  }, []));
+  return Object.fromEntries(Object.entries(rules).reduce(
+    (/** @type {Array<[string, import('eslint').Linter.RuleEntry]>} */ overrides, [name, options]) => {
+      overrides.push([name, 'off'], [`@typescript-eslint/${name}`, options]);
+      return overrides;
+    },
+    []
+  ));
 }
 
-module.exports = {
+/** @type {import('eslint').Linter.Config} */
+const configuration = {
   env: {es6: true, node: true},
   extends: [
-    'eslint:recommended', // https://github.com/eslint/eslint/blob/main/packages/js/src/configs/eslint-recommended.js
-    'plugin:import/recommended' // https://github.com/import-js/eslint-plugin-import/blob/main/config/recommended.js
+    // https://github.com/eslint/eslint/blob/v8.x/packages/js/src/configs/eslint-recommended.js
+    'eslint:recommended',
+    // https://github.com/un-ts/eslint-plugin-import-x/blob/master/src/config/recommended.ts
+    'plugin:import-x/recommended',
+    // https://github.com/un-ts/eslint-plugin-import-x/blob/master/src/config/typescript.ts
+    'plugin:import-x/typescript'
   ],
   ignorePatterns: ['**/build', '**/dist'],
   overrides: [
     // ESM
     {
       files: ['*.@(j|t)s?(x)'], // *.js, *.jsx, *.ts, *.tsx
-      // https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-commonjs.md
-      rules: {'import/no-commonjs': 'error'}
+      // https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/no-commonjs.md
+      rules: {'import-x/no-commonjs': 'error'}
     },
     // indices
     {
       files: ['index.*'],
       rules: {
-        // https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/prefer-default-export.md
-        'import/prefer-default-export': 'off' // `export {default as foo} from 'foo';`
+        // https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/prefer-default-export.md
+        'import-x/prefer-default-export': 'off' // `export {default as foo} from 'foo';`
       }
     },
-    // Jest mocks (ESM)
+    // Jest/Vitest mocks
     {
       env: {jest: true},
       files: ['**/__mocks__/**'],
       rules: {
-        // Jest's dynamic importing of manual mocks precludes static analysis of unused exports
-        // https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-unused-modules.md
-        'import/no-unused-modules': ['error', {missingExports: true, unusedExports: false}],
-        // https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/prefer-default-export.md
-        'import/prefer-default-export': 'off'
+        // dynamic importing of manual mocks precludes static analysis of unused exports
+        // https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/no-unused-modules.md
+        'import-x/no-unused-modules': ['error', {missingExports: true, unusedExports: false}],
+        // https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/prefer-default-export.md
+        'import-x/prefer-default-export': 'off'
       }
     },
-    // Jest tests
+    // Jest/Vitest tests
     {
       env: {jest: true},
       files: ['**/__tests__/**'],
       rules: {
+        // function stubs that return static values
         // https://eslint.org/docs/latest/rules/class-methods-use-this
-        'class-methods-use-this': 'off',
-        // https://eslint.org/docs/latest/rules/no-new
-        'no-new': 'off'
+        'class-methods-use-this': 'off'
       }
     },
     // JSX
@@ -132,34 +139,38 @@ module.exports = {
         '@typescript-eslint/no-extraneous-class': 'off',
         '@typescript-eslint/no-import-type-side-effects': 'error',
         '@typescript-eslint/no-non-null-assertion': 'off',
+        '@typescript-eslint/no-unnecessary-parameter-property-assignment': 'error', // since v7.16.0
         '@typescript-eslint/no-unsafe-unary-minus': 'error',
         '@typescript-eslint/no-useless-empty-export': 'error',
         '@typescript-eslint/parameter-properties': 'error',
         '@typescript-eslint/prefer-find': 'error',
         '@typescript-eslint/prefer-nullish-coalescing': 'off',
         '@typescript-eslint/prefer-string-starts-ends-with': ['error', {allowSingleElementEquality: 'always'}],
+        '@typescript-eslint/prefer-ts-expect-error': 'off', // deprecated subset of `ban-ts-comment`
         '@typescript-eslint/promise-function-async': 'error',
         '@typescript-eslint/restrict-template-expressions': 'off',
-        '@typescript-eslint/sort-type-constituents': 'off',
         '@typescript-eslint/switch-exhaustiveness-check': ['error', {
           allowDefaultCaseForExhaustiveSwitch: false, requireDefaultForNonUnion: true
         }],
-        '@typescript-eslint/unified-signatures': ['error', {ignoreDifferentlyNamedParameters: true}],
-
-        //==============================================================================================================
-        // eslint-plugin-import <https://github.com/import-js/eslint-plugin-import#rules>
-        //==============================================================================================================
-
-        'import/named': 'off' // redundant for TypeScript
+        '@typescript-eslint/unified-signatures': ['error', {ignoreDifferentlyNamedParameters: true}]
       }
     },
-    // TypeScript Jest tests
+    // Jest/Vitest tests
     {
       files: ['**/__tests__/*.?(c)ts?(x)'],
       rules: {
+        // function stubs that do nothing
+        // https://typescript-eslint.io/rules/no-empty-function/
         '@typescript-eslint/no-empty-function': 'off',
+        // e.g. `jest.fn<void, […]>(…)` -- rule option `allowInGenericTypeArguments` doesn't apply to function calls;
+        //                                 see https://github.com/typescript-eslint/typescript-eslint/issues/8113
+        // https://typescript-eslint.io/rules/no-invalid-void-type/
         '@typescript-eslint/no-invalid-void-type': 'off',
+        // e.g. `expect(object).toEqual({foo: expect.any(Function)})` -- `expect.any()` returns `any`
+        // https://typescript-eslint.io/rules/no-unsafe-assignment/
         '@typescript-eslint/no-unsafe-assignment': 'off',
+        // e.g. `expect(object.method).toHaveBeenCalled()`
+        // https://typescript-eslint.io/rules/unbound-method/
         '@typescript-eslint/unbound-method': 'off'
       }
     }
@@ -211,7 +222,7 @@ module.exports = {
     'no-new': 'error',
     'no-new-func': 'error',
     'no-new-wrappers': 'error',
-    'no-object-constructor': 'error',
+    'no-object-constructor': 'error', // since v8.50.0
     'no-octal-escape': 'error',
     'no-redeclare': 'error',
     'no-return-assign': 'error',
@@ -303,45 +314,46 @@ module.exports = {
     'yield-star-spacing': ['error', 'before'],
 
     //==================================================================================================================
-    // eslint-plugin-import <https://github.com/import-js/eslint-plugin-import#rules>
+    // eslint-plugin-import-x <https://github.com/un-ts/eslint-plugin-import-x#rules>
     //==================================================================================================================
 
-    'import/exports-last': 'error',
-    'import/extensions': ['error', 'ignorePackages', {ts: 'ignore', tsx: 'ignore'}],
-    'import/first': 'error',
-    'import/newline-after-import': 'error',
-    'import/no-absolute-path': 'error',
-    'import/no-amd': 'error',
-    'import/no-deprecated': 'warn',
-    'import/no-dynamic-require': 'error',
-    'import/no-extraneous-dependencies': 'error',
-    'import/no-import-module-exports': 'error',
-    'import/no-mutable-exports': 'error',
-    'import/no-named-default': 'error',
-    'import/no-namespace': 'error',
-    'import/no-relative-packages': 'error',
-    'import/no-self-import': 'error',
-    'import/no-unassigned-import': ['error', {allow: ['**/*.?(s)css']}],
-    'import/no-unresolved': ['error', {commonjs: true}],
-    'import/no-useless-path-segments': ['error', {commonjs: true}],
-    'import/no-webpack-loader-syntax': 'error',
-    'import/order': ['error', {
+    'import-x/exports-last': 'error',
+    'import-x/extensions': ['error', 'ignorePackages', {ts: 'ignore', tsx: 'ignore'}],
+    'import-x/first': 'error',
+    'import-x/newline-after-import': 'error',
+    'import-x/no-absolute-path': 'error',
+    'import-x/no-amd': 'error',
+    'import-x/no-deprecated': 'warn',
+    'import-x/no-dynamic-require': 'error',
+    'import-x/no-extraneous-dependencies': 'error',
+    'import-x/no-import-module-exports': 'error',
+    'import-x/no-mutable-exports': 'error',
+    'import-x/no-named-default': 'error',
+    'import-x/no-namespace': 'error',
+    'import-x/no-relative-packages': 'error',
+    'import-x/no-self-import': 'error',
+    'import-x/no-unassigned-import': ['error', {allow: ['**/*.?(s)css']}],
+    'import-x/no-unresolved': ['error', {commonjs: true}],
+    'import-x/no-useless-path-segments': ['error', {commonjs: true}],
+    'import-x/no-webpack-loader-syntax': 'error',
+    'import-x/order': ['error', {
       alphabetize: {order: 'asc'},
       groups: ['builtin', 'external', 'internal'],
       'newlines-between': 'always',
       warnOnUnassignedImports: true
     }],
-    'import/prefer-default-export': 'error'
+    'import-x/prefer-default-export': 'error'
   },
   settings: {
     //==================================================================================================================
-    // eslint-plugin-import <https://github.com/import-js/eslint-plugin-import#settings>
+    // eslint-plugin-import-x <https://github.com/un-ts/eslint-plugin-import-x#settings>
     //==================================================================================================================
-    'import/extensions': ['.cjs', '.cts', '.js', '.json', '.jsx', '.ts', '.tsx'],
-    'import/external-module-folders': ['node_modules', 'node_modules/@types'],
-    'import/resolver': {
-      'babel-module': {}, // https://github.com/tleunen/eslint-import-resolver-babel-module
-      typescript: {} // https://github.com/import-js/eslint-import-resolver-typescript
+    'import-x/resolver': {
+      // https://github.com/import-js/eslint-import-resolver-typescript -- supports `import-x` since v3.6.2
+      typescript: {}
     }
   }
 };
+
+// must be exported in a separate statement in order for `tsc` to preserve JSDoc
+module.exports = configuration;
