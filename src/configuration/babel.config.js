@@ -1,8 +1,3 @@
-//======================================================================================================================
-// For now, this must be a CommonJS module. ECMAScript modules cause @babel/eslint-parser to become
-// asynchronous, which ESLint does not support: https://github.com/eslint/eslint/discussions/14295
-//======================================================================================================================
-
 /** @type {import('@babel/core').TransformOptions} */
 const configuration = {
   plugins: ['@babel/plugin-syntax-import-attributes'],
@@ -27,4 +22,4 @@ const configuration = {
 };
 
 // must be exported in a separate statement in order for `tsc` to preserve JSDoc
-module.exports = configuration;
+export default configuration;

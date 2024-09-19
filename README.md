@@ -28,12 +28,12 @@
 }
 ```
 
-#### Option 2: 📍 `babel.config.cjs`
+#### Option 2: 📍 `babel.config.js`
 
 ```js
-const base = require('bitumen/configuration/babel');
+import base from 'bitumen/configuration/babel';
 
-module.exports = {
+export default {
   ...base,
   // custom configuration and overrides
 };
@@ -106,10 +106,11 @@ The following environment variables must be set at runtime:
 ### Vitest
 
 - Automatically clears mocks after each test,
-- requires 100% `istanbul` coverage and writes reports to `<root>/src`,
-- enables globals for automatic DOM clean-up after each UI test,
-- uses thread workers for reduced overhead, and
-- turns off watch mode by default.
+- enables globals for automatic DOM clean-up between UI tests,
+- looks for tests and mocks under `./src`,
+- requires 100% `istanbul` coverage,
+- turns off watch mode by default, and
+- uses thread workers for reduced overhead.
 
 📍 `vitest.config.js`
 

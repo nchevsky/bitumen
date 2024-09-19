@@ -12,6 +12,7 @@ export default defineConfig({
     },
     globals: true,
     pool: 'threads',
+    root: 'src',
     watch: false
   }
 });

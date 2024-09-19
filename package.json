@@ -6,14 +6,14 @@
   "license": "BSD-2-Clause",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nchevsky/bitumen"
+    "url": "git+https://github.com/nchevsky/bitumen.git"
   },
   "exports": {
     "./collections": {
       "import": "./dist/collections/index.js",
       "require": "./dist/collections/index.cjs"
     },
-    "./configuration/babel": "./dist/configuration/babel.config.cjs",
+    "./configuration/babel": "./dist/configuration/babel.config.js",
     "./configuration/eslint": "./dist/configuration/eslintrc.cjs",
     "./configuration/eslint-react": "./dist/configuration/eslintrc-react.cjs",
     "./configuration/rollup": "./dist/configuration/rollup.config.cjs",
@@ -51,8 +51,8 @@
     "prepare": "husky",
     "prepublishOnly": "npm run clean && npm run make && npm run package",
     "test": "npm run test:lint && npm run test:unit",
-    "test:lint": "env-cmd cross-env-shell eslint --ext $EXTENSIONS --ignore-path .gitignore . && tsc --emitDeclarationOnly false --noEmit",
-    "test:unit": "env-cmd cross-env-shell vitest --root=$SRC_PATH/"
+    "test:lint": "eslint --ignore-path .gitignore . && tsc --emitDeclarationOnly false --noEmit",
+    "test:unit": "vitest"
   },
   "dependencies": {
     "core-js": "^3.38.1"
@@ -60,22 +60,21 @@
   "devDependencies": {
     "@babel/cli": "^7.25.6",
     "@babel/core": "^7.25.2",
-    "@babel/eslint-parser": "^7.25.1",
     "@babel/plugin-syntax-import-attributes": "^7.23.3",
     "@babel/preset-env": "^7.25.4",
     "@babel/preset-typescript": "^7.24.7",
     "@types/babel__core": "^7.20.5",
     "@types/eslint": "^8.56.12",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
-    "@vitest/coverage-istanbul": "^2.0.5",
+    "@vitest/coverage-istanbul": "^2.1.1",
     "concurrently": "^8.2.2",
     "cross-env": "^7.0.3",
     "del-cli": "^5.1.0",
     "env-cmd": "^10.1.0",
-    "eslint": "^8.57.0",
+    "eslint": "^8.57.1",
     "eslint-import-resolver-typescript": "^3.6.3",
     "eslint-plugin-import-x": "^4.2.1",
-    "husky": "^9.1.5",
+    "husky": "^9.1.6",
     "rollup": "^2.79.1",
     "rollup-plugin-copy": "^3.5.0",
     "typescript": "~5.5.4",
@@ -83,19 +82,39 @@
   },
   "peerDependencies": {
     "@babel/core": "^7.23",
-    "@babel/eslint-parser": "^7.23",
     "@babel/plugin-syntax-import-attributes": "^7.23",
     "@babel/preset-env": "^7.23",
     "@babel/preset-typescript": "^7.23",
     "@typescript-eslint/eslint-plugin": "^7.16",
+    "@vitest/coverage-istanbul": "^2",
+    "core-js": "^3.38.1",
     "eslint": "^8.50",
     "eslint-import-resolver-typescript": "^3.6.2",
     "eslint-plugin-import-x": "^4.2.1",
     "eslint-plugin-react": "^7.35",
     "eslint-plugin-react-hooks": "*",
-    "typescript": "^5.5"
+    "typescript": "^5.5",
+    "vitest": "^2"
   },
   "peerDependenciesMeta": {
+    "@babel/core": {
+      "optional": true
+    },
+    "@babel/plugin-syntax-import-attributes": {
+      "optional": true
+    },
+    "@babel/preset-env": {
+      "optional": true
+    },
+    "@babel/preset-typescript": {
+      "optional": true
+    },
+    "@vitest/coverage-istanbul": {
+      "optional": true
+    },
+    "core-js": {
+      "optional": true
+    },
     "eslint-plugin-react": {
       "optional": true
     },
@@ -104,7 +123,13 @@
     },
     "typescript": {
       "optional": true
+    },
+    "vitest": {
+      "optional": true
     }
+  },
+  "babel": {
+    "extends": "./src/configuration/babel.config.js"
   },
   "eslintConfig": {
     "extends": "./src/configuration/eslintrc.cjs"
