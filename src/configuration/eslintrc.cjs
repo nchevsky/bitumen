@@ -129,6 +129,7 @@ const configuration = {
 
         // native rules
         '@typescript-eslint/array-type': ['error', {default: 'generic'}],
+        '@typescript-eslint/consistent-indexed-object-style': 'off',
         '@typescript-eslint/consistent-type-exports': ['error', {fixMixedExportsWithInlineTypeSpecifier: true}],
         '@typescript-eslint/consistent-type-imports': ['error', {
           disallowTypeAnnotations: false, fixStyle: 'inline-type-imports'

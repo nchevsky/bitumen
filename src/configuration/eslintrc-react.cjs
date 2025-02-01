@@ -24,25 +24,14 @@ const configuration = {
       }
     }
   ],
-  rules: {
-    // https://github.com/jsx-eslint/eslint-plugin-react#list-of-supported-rules
+  rules: { // https://github.com/jsx-eslint/eslint-plugin-react#list-of-supported-rules
     'react/boolean-prop-naming': 'off',
     'react/checked-requires-onchange-or-readonly': 'error',
     'react/destructuring-assignment': ['error', 'never'],
     'react/forbid-component-props': ['error', {forbid: ['style']}],
     'react/forbid-dom-props': ['error', {forbid: ['style']}],
+    'react/forward-ref-uses-ref': 'error',
     'react/function-component-definition': ['error', {unnamedComponents: 'arrow-function'}],
-    'react/no-adjacent-inline-elements': 'off',
-    'react/no-multi-comp': ['error', {ignoreStateless: true}],
-    'react/no-set-state': 'off', // does not apply to function components
-    'react/no-unknown-property': ['error', {requireDataLowercase: true}],
-    'react/no-unstable-nested-components': ['error', {allowAsProps: true}],
-    'react/prefer-read-only-props': 'off',
-    'react/require-default-props': 'off', // `defaultProps` are deprecated
-    'react/sort-comp': 'off', // does not apply to function components
-    'react/sort-prop-types': ['error', {checkTypes: true}],
-
-    // https://github.com/jsx-eslint/eslint-plugin-react#jsx-specific-rules
     'react/jsx-boolean-value': ['error', 'always'],
     'react/jsx-closing-bracket-location': ['error', 'line-aligned'],
     'react/jsx-closing-tag-location': ['error', 'line-aligned'/* since v7.35.0 */],
@@ -64,7 +53,16 @@ const configuration = {
     'react/jsx-one-expression-per-line': 'off',
     'react/jsx-props-no-spread-multi': 'error', // since v7.35.0
     'react/jsx-tag-spacing': ['error', {beforeClosing: 'never', beforeSelfClosing: 'never'}],
-    'react/jsx-wrap-multilines': 'off' // unconditionally enforces parentheses even when redundant
+    'react/jsx-wrap-multilines': 'off', // unconditionally enforces parentheses even when redundant
+    'react/no-adjacent-inline-elements': 'off',
+    'react/no-multi-comp': ['error', {ignoreStateless: true}],
+    'react/no-set-state': 'off', // does not apply to function components
+    'react/no-unknown-property': ['error', {requireDataLowercase: true}],
+    'react/no-unstable-nested-components': ['error', {allowAsProps: true}],
+    'react/prefer-read-only-props': 'off',
+    'react/require-default-props': 'off', // `defaultProps` are deprecated
+    'react/sort-comp': 'off', // does not apply to function components
+    'react/sort-prop-types': ['error', {checkTypes: true}]
   },
   settings: {
     react: { // https://github.com/jsx-eslint/eslint-plugin-react#configuration-legacy-eslintrc

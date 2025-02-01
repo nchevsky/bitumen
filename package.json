@@ -1,6 +1,6 @@
 {
   "name": "bitumen",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "A collection of utilities, types, and opinionated configuration for Babel, ESLint, Rollup, TypeScript, and Vitest.",
   "author": "Nick Chevsky",
   "license": "BSD-2-Clause",
@@ -55,39 +55,37 @@
     "test:unit": "vitest"
   },
   "dependencies": {
-    "core-js": "^3.38.1"
+    "core-js": "^3.40.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.25.6",
-    "@babel/core": "^7.25.2",
-    "@babel/plugin-syntax-import-attributes": "^7.23.3",
-    "@babel/preset-env": "^7.25.4",
-    "@babel/preset-typescript": "^7.24.7",
+    "@babel/cli": "^7.26.4",
+    "@babel/core": "^7.26.7",
+    "@babel/preset-env": "^7.26.7",
+    "@babel/preset-typescript": "^7.26.0",
     "@types/babel__core": "^7.20.5",
     "@types/eslint": "^8.56.12",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
-    "@vitest/coverage-istanbul": "^2.1.1",
-    "concurrently": "^8.2.2",
+    "@vitest/coverage-istanbul": "^2.1.8",
+    "concurrently": "^9.1.2",
     "cross-env": "^7.0.3",
-    "del-cli": "^5.1.0",
+    "del-cli": "^6.0.0",
     "env-cmd": "^10.1.0",
     "eslint": "^8.57.1",
     "eslint-import-resolver-typescript": "^3.6.3",
-    "eslint-plugin-import-x": "^4.2.1",
-    "husky": "^9.1.6",
+    "eslint-plugin-import-x": "^4.6.1",
+    "husky": "^9.1.7",
     "rollup": "^2.79.1",
     "rollup-plugin-copy": "^3.5.0",
     "typescript": "~5.5.4",
     "vitest": "^2.0.5"
   },
   "peerDependencies": {
-    "@babel/core": "^7.23",
-    "@babel/plugin-syntax-import-attributes": "^7.23",
-    "@babel/preset-env": "^7.23",
-    "@babel/preset-typescript": "^7.23",
+    "@babel/core": "^7.26",
+    "@babel/preset-env": "^7.26",
+    "@babel/preset-typescript": "^7.26",
     "@typescript-eslint/eslint-plugin": "^7.16",
     "@vitest/coverage-istanbul": "^2",
-    "core-js": "^3.38.1",
+    "core-js": "^3.40.0",
     "eslint": "^8.50",
     "eslint-import-resolver-typescript": "^3.6.2",
     "eslint-plugin-import-x": "^4.2.1",
@@ -98,9 +96,6 @@
   },
   "peerDependenciesMeta": {
     "@babel/core": {
-      "optional": true
-    },
-    "@babel/plugin-syntax-import-attributes": {
       "optional": true
     },
     "@babel/preset-env": {

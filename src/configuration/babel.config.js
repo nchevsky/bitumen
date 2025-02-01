@@ -1,6 +1,5 @@
 /** @type {import('@babel/core').TransformOptions} */
 const configuration = {
-  plugins: ['@babel/plugin-syntax-import-attributes'],
   presets: [
     ['@babel/preset-env', {
       corejs /* since v7.4.0 */: 3,
