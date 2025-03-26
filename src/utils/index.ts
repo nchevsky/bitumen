@@ -42,6 +42,16 @@ export function clone<O extends object, PD = PropertyDescriptors<O>>(
 }
 
 /**
+ * Escapes special characters in a given string for safe use in a regular expression.
+ * 
+ * @param string String containing RegExp-unsafe characters (e.g. _'foo (bar)'_).
+ * @returns RegExp-safe string (e.g. _'foo \\(bar\\)'_).
+ */
+export function escapeForRegExp(string: string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/**
  * Determines whether a given value is empty* and, if so, returns a given substitute
  * as a default/fallback value; otherwise, returns the original value if non-empty.
  * 
@@ -118,4 +128,35 @@ export function nestInto(object: Dictionary, ...keysAndValue: [...Array<number |
     path = path[key] as Dictionary | undefined ?? (path[key] = {});
   }
   return object;
+}
+
+/**
+ * Fully typed implementation of `Object.entries()` with literal key inference.
+ * 
+ * @param object Object whose key-value pairs are desired (e.g. `{bar: 123, foo: 456}`).
+ * @returns Array of key-value pairs (e.g. `[['bar', 123], ['foo', 456]]`).
+ */
+export function objectEntries<O extends object>(object: O) {
+  return Object.entries(object) as Array<[keyof O, O[keyof O]]>;
+}
+
+/**
+ * Fully typed implementation of `Object.keys()` with literal key inference.
+ * 
+ * @param object Object whose keys are desired (e.g. `{bar: 123, foo: 456}`).
+ * @returns Array of keys (e.g. `['bar', 'foo']`).
+ */
+export function objectKeys<O extends object>(object: O) {
+  return Object.keys(object) as Array<keyof O>;
+}
+
+/**
+ * Removes unwanted keys from a given object.
+ * 
+ * @param object Object with unwanted keys (e.g. `{bar: 123, foo: 456}`).
+ * @param keys Names of keys to remove (e.g. _'bar'_).
+ * @returns A copy of the object without the unwanted keys (e.g. `{foo: 456}`).
+ */
+export function omit<O extends object, K extends keyof O>(object: O, ...keys: Array<K>) {
+  return Object.fromEntries(objectEntries(object).filter(([key, value]) => !keys.includes(key as K))) as Omit<O, K>;
 }

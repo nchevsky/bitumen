@@ -12,6 +12,8 @@ export default defineConfig({
     },
     globals: true,
     pool: 'threads',
+    // @ts-expect-error -- `summary` option missing from types
+    reporters: ['default', {summary: false}],
     root: 'src',
     watch: false
   }

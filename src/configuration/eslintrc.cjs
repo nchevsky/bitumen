@@ -45,6 +45,16 @@ const configuration = {
         'import-x/prefer-default-export': 'off' // `export {default as foo} from 'foo';`
       }
     },
+    // Jest/Vitest mocks and tests
+    {
+      env: {jest: true},
+      files: ['**/__@(mocks|tests)__/**'],
+      rules: {
+        // function stubs that return static values
+        // https://eslint.org/docs/latest/rules/class-methods-use-this
+        'class-methods-use-this': 'off'
+      }
+    },
     // Jest/Vitest mocks
     {
       env: {jest: true},
@@ -55,16 +65,6 @@ const configuration = {
         'import-x/no-unused-modules': ['error', {missingExports: true, unusedExports: false}],
         // https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/prefer-default-export.md
         'import-x/prefer-default-export': 'off'
-      }
-    },
-    // Jest/Vitest tests
-    {
-      env: {jest: true},
-      files: ['**/__tests__/**'],
-      rules: {
-        // function stubs that return static values
-        // https://eslint.org/docs/latest/rules/class-methods-use-this
-        'class-methods-use-this': 'off'
       }
     },
     // JSX
@@ -156,17 +156,13 @@ const configuration = {
         '@typescript-eslint/unified-signatures': ['error', {ignoreDifferentlyNamedParameters: true}]
       }
     },
-    // Jest/Vitest tests
+    // Jest/Vitest mocks and tests
     {
-      files: ['**/__tests__/*.?(c)ts?(x)'],
+      files: ['**/__@(mocks|tests)__/**'],
       rules: {
         // function stubs that do nothing
         // https://typescript-eslint.io/rules/no-empty-function/
         '@typescript-eslint/no-empty-function': 'off',
-        // e.g. `jest.fn<void, […]>(…)` -- rule option `allowInGenericTypeArguments` doesn't apply to function calls;
-        //                                 see https://github.com/typescript-eslint/typescript-eslint/issues/8113
-        // https://typescript-eslint.io/rules/no-invalid-void-type/
-        '@typescript-eslint/no-invalid-void-type': 'off',
         // e.g. `expect(object).toEqual({foo: expect.any(Function)})` -- `expect.any()` returns `any`
         // https://typescript-eslint.io/rules/no-unsafe-assignment/
         '@typescript-eslint/no-unsafe-assignment': 'off',
@@ -340,6 +336,7 @@ const configuration = {
     'import-x/order': ['error', {
       alphabetize: {order: 'asc'},
       groups: ['builtin', 'external', 'internal'],
+      named: true,
       'newlines-between': 'always',
       warnOnUnassignedImports: true
     }],

@@ -10,8 +10,10 @@ const configuration = {
     // Jest/Vitest mocks and tests
     {
       env: {jest: true},
-      files: ['**/__mocks__/**', '**/__tests__/**'],
+      files: ['**/__@(mocks|tests)__/**'],
       rules: {
+        // OK to call mocked hooks from anywhere in tests
+        'react-hooks/rules-of-hooks': 'off',
         // e.g. expect(element).toEqual(<span>literal</span>)
         // https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/jsx-no-literals.md
         'react/jsx-no-literals': 'off',

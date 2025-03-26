@@ -1,6 +1,6 @@
 import {describe, expect, test, vi} from 'vitest';
 
-import {clone, ifEmpty, nestInto} from '../index.ts';
+import {clone, escapeForRegExp, ifEmpty, nestInto, objectEntries, objectKeys, omit} from '../index.ts';
 
 describe('utils/clone()', () => {
   class Subject {
@@ -43,6 +43,9 @@ describe('utils/clone()', () => {
     expect(propertyDescriptorsCallback).toHaveBeenCalledWith(subject);
   });
 });
+
+test('utils/escapeForRegExp()', () =>
+  expect(escapeForRegExp('.*+?^${}()|[]\\')).toEqual('\\.\\*\\+\\?\\^\\$\\{\\}\\(\\)\\|\\[\\]\\\\'));
 
 describe('utils/ifEmpty()', () => {
   test('array is empty if it contains no items', () => {
@@ -88,4 +91,30 @@ describe('utils/nestInto()', () => {
     nestInto(object, 'foo', 'bar', 789);
     expect(object).toEqual({foo: {bar: [123, 456, 789]}});
   });
+});
+
+test('utils/objectEntries()', () => {
+  const entries = objectEntries({foo: 123} as const);
+  const key: 'foo' | undefined = entries[0]?.[0];
+  const value: 123 | undefined = entries[0]?.[1];
+
+  expect(key).toEqual('foo');
+  expect(value).toEqual(123);
+});
+
+test('utils/objectKeys()', () => {
+  const entries = objectKeys({foo: 123});
+  const key: 'foo' | undefined = entries[0];
+
+  expect(key).toEqual('foo');
+});
+
+test('utils/omit()', () => {
+  const object = omit({bar: 123, foo: 456} as const, 'bar');
+  // @ts-expect-error -- `bar` → 🗑️
+  const bar: any = object.bar;
+  const foo: 456 = object.foo;
+
+  expect(bar).toBeUndefined();
+  expect(foo).toEqual(456);
 });
