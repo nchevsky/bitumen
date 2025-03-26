@@ -1,6 +1,6 @@
 {
   "name": "bitumen",
-  "version": "3.3.0",
+  "version": "3.3.1",
   "description": "A collection of utilities, types, and opinionated configuration for Babel, ESLint, Rollup, TypeScript, and Vitest.",
   "author": "Nick Chevsky",
   "license": "BSD-2-Clause",
@@ -80,18 +80,18 @@
     "vitest": "^3.0.9"
   },
   "peerDependencies": {
-    "@babel/core": "^7.26",
-    "@babel/preset-env": "^7.26",
-    "@babel/preset-typescript": "^7.26",
-    "@typescript-eslint/eslint-plugin": "^7.16",
+    "@babel/core": ">=7.26",
+    "@babel/preset-env": ">=7.26",
+    "@babel/preset-typescript": ">=7.26",
+    "@typescript-eslint/eslint-plugin": ">=7.16",
     "@vitest/coverage-istanbul": ">=2",
-    "core-js": "^3.41.0",
-    "eslint": "^8.50",
-    "eslint-import-resolver-typescript": "^3.6.2",
-    "eslint-plugin-import-x": "^4.2.1",
-    "eslint-plugin-react": "^7.35",
+    "core-js": ">=3",
+    "eslint": ">=8.50",
+    "eslint-import-resolver-typescript": ">=3.6.2",
+    "eslint-plugin-import-x": ">=4.9.0",
+    "eslint-plugin-react": ">=7.35",
     "eslint-plugin-react-hooks": "*",
-    "typescript": "^5.5",
+    "typescript": ">=5.5",
     "vitest": ">=2"
   },
   "peerDependenciesMeta": {
@@ -104,10 +104,22 @@
     "@babel/preset-typescript": {
       "optional": true
     },
+    "@typescript-eslint/eslint-plugin": {
+      "optional": true
+    },
     "@vitest/coverage-istanbul": {
       "optional": true
     },
     "core-js": {
+      "optional": true
+    },
+    "eslint": {
+      "optional": true
+    },
+    "eslint-import-resolver-typescript": {
+      "optional": true
+    },
+    "eslint-plugin-import-x": {
       "optional": true
     },
     "eslint-plugin-react": {
